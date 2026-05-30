@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bridge Girder Angle Stack Calculator</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Phosphor Icons - free, MIT licensed -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/2.0.0/phosphor.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+:root {
+  --steel:#1a3a5c; --mid:#2563a8; --light:#c8def5; --pale:#e8f2fc;
+  --accent:#d97706; --success:#15803d; --success-bg:#dcfce7;
+  --warn:#b45309; --warn-bg:#fef3c7;
+  --danger:#b91c1c; --danger-bg:#fee2e2;
+  --gray-bg:#f4f6f9; --border:#d0dae8; --text:#1a2433; --muted:#5a6a80;
+  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
+  --radius:10px; --shadow:0 2px 14px rgba(26,58,92,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100vh;}
+
+/* Header */
+.app-header{
+  background:linear-gradient(120deg,#0f2540 0%,var(--steel) 45%,#1f4a78 100%);
+  color:#fff;padding:1.4rem 0;position:sticky;top:0;z-index:100;
+  box-shadow:0 6px 28px rgba(15,37,64,0.4);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  overflow:hidden;
+}
+.app-header::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent) 0%,#f59e0b 50%,var(--accent) 100%);
+}
+.app-header::after{
+  content:'';position:absolute;right:-60px;top:50%;transform:translateY(-50%);
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(217,119,6,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.header-icon{
+  width:52px;height:52px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent) 0%,#b45309 100%);
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(217,119,6,0.45);
+  transform:rotate(-4deg);transition:transform .25s;
+}
+.header-icon:hover{transform:rotate(0deg) scale(1.05);}
+.header-icon ph-ruler-cross-bold{font-size:1.7rem;color:#fff;}
+.app-header h1{
+  font-size:clamp(1.05rem,2.6vw,1.55rem);font-weight:700;margin:0;
+  letter-spacing:-0.02em;line-height:1.15;
+  background:linear-gradient(90deg,#ffffff 0%,#cfe0f5 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.app-header .subtitle{
+  font-size:0.8rem;color:#9db8d8;margin-top:4px;font-weight:500;
+  letter-spacing:0.02em;
+}
+
+/* Cards */
+.calc-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:1.1rem;overflow:hidden;}
+.card-hdr{background:var(--steel);color:#fff;padding:0.6rem 1rem;font-weight:700;font-size:0.78rem;letter-spacing:0.07em;text-transform:uppercase;display:flex;align-items:center;gap:0.6rem;}
+.card-hdr.mid{background:var(--mid);}
+.step-num{background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;}
+.card-body{padding:1rem 1.1rem;}
+
+/* Input rows */
+.input-row{display:grid;grid-template-columns:1fr 120px;align-items:center;gap:0.4rem 0.75rem;padding:0.45rem 0;border-bottom:1px solid #f0f4f8;}
+.input-row:last-child{border-bottom:none;}
+.input-label{font-size:0.85rem;font-weight:600;}
+.input-hint{font-size:0.72rem;color:var(--muted);font-style:italic;margin-top:1px;}
+.form-control,.form-select{font-family:var(--mono);font-size:0.92rem;font-weight:600;color:#1a4fa0;background:#f0f6ff;border:2px solid #b8d0f0;border-radius:6px;text-align:center;padding:0.35rem 0.5rem;transition:border-color .15s,box-shadow .15s;}
+.form-control:focus,.form-select:focus{border-color:var(--mid);box-shadow:0 0 0 3px rgba(37,99,168,0.18);background:#fff;outline:none;}
+.form-select{text-align:left;padding-left:0.5rem;}
+
+/* Inventory */
+.inv-table{width:100%;border-collapse:collapse;}
+.inv-table th{background:var(--gray-bg);font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:.45rem .6rem;border-bottom:2px solid var(--border);text-align:center;}
+.inv-table td{padding:.5rem .6rem;border-bottom:1px solid #f0f4f8;text-align:center;font-size:.88rem;}
+.inv-table tr:last-child td{border-bottom:none;}
+.thk-lbl{font-family:var(--mono);font-weight:700;color:var(--steel);font-size:1rem;}
+.adds-lbl{font-family:var(--mono);font-size:.8rem;color:var(--mid);background:var(--pale);padding:2px 7px;border-radius:4px;display:inline-block;}
+.inv-qty{width:72px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;color:#1a4fa0;}
+
+/* Calculate button */
+.btn-calc{background:linear-gradient(135deg,var(--accent) 0%,#b45309 100%);color:#fff;border:none;padding:.8rem 2rem;font-size:.95rem;font-weight:700;border-radius:8px;letter-spacing:.03em;box-shadow:0 4px 16px rgba(217,119,6,.3);transition:transform .1s,box-shadow .1s;width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.btn-calc:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(217,119,6,.4);color:#fff;}
+.btn-calc:active{transform:translateY(0);}
+
+/* Results */
+.results-section{display:none;}
+.results-section.visible{display:block;}
+.result-hero{background:linear-gradient(135deg,var(--steel) 0%,#0f2540 100%);color:#fff;border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:.75rem;}
+.result-hero .big-num{font-family:var(--mono);font-size:clamp(2rem,7vw,3.5rem);font-weight:700;line-height:1;color:#fcd34d;}
+.result-hero .big-lbl{font-size:.78rem;opacity:.75;margin-top:.3rem;text-transform:uppercase;letter-spacing:.08em;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;text-align:center;height:100%;}
+.stat-val{font-family:var(--mono);font-size:1.25rem;font-weight:700;color:var(--mid);}
+.stat-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}
+
+/* Layout table */
+.sled-hdr{background:var(--steel);color:#fff;padding:.55rem 1rem;font-weight:700;font-size:.82rem;letter-spacing:.04em;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.sled-hdr.s2{background:var(--mid);}
+.layout-wrap{overflow-x:auto;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);margin-bottom:1.25rem;}
+.layout-tbl{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap;min-width:700px;}
+.layout-tbl thead th{background:var(--gray-bg);padding:.5rem .65rem;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center;border-bottom:2px solid var(--border);}
+.layout-tbl tbody td{padding:.5rem .65rem;border-bottom:1px solid #f0f4f8;text-align:center;vertical-align:middle;}
+.layout-tbl tbody tr:hover{background:#f8fbff;}
+.row-stack td{background:#fffbeb;}
+.row-ok td{background:#f0fdf4;}
+.row-skip td{background:#fafafa;color:#aaa;}
+.badge-stack{background:var(--warn-bg);color:var(--warn);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.badge-ok{background:var(--success-bg);color:var(--success);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;}
+.badge-skip{background:#f0f0f0;color:#999;font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:20px;}
+.badge-short{background:var(--danger-bg);color:var(--danger);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;}
+.combo-pill{background:var(--pale);color:var(--mid);font-family:var(--mono);font-size:.75rem;padding:2px 8px;border-radius:4px;display:inline-block;font-weight:600;}
+.mono{font-family:var(--mono);}
+
+/* Inv summary */
+.inv-sum-row{display:flex;justify-content:space-between;align-items:center;padding:.32rem 0;border-bottom:1px solid #e5ecf5;font-size:.85rem;}
+.inv-sum-row:last-child{border-bottom:none;font-weight:700;padding-top:.5rem;}
+.bar-wrap{flex:1;margin:0 .75rem;max-width:160px;}
+.bar-bg{height:6px;background:#dde8f5;border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width .4s;background:var(--mid);}
+.bar-fill.warn{background:var(--accent);}
+.bar-fill.danger{background:#dc2626;}
+
+/* Camber diagram */
+.camber-wrap{background:var(--gray-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;margin-top:.75rem;}
+#camberSvg{width:100%;height:auto;display:block;}
+
+/* No-stack alert */
+.alert-ok{background:var(--success-bg);border:1px solid #86efac;color:var(--success);border-radius:var(--radius);padding:1rem 1.25rem;font-weight:600;display:flex;align-items:center;gap:.75rem;}
+
+/* Stack placement visual */
+/* Stack visual — uses inline styles */
+.vis-legend{font-size:.72rem;color:var(--muted);margin-top:.6rem;line-height:1.5;padding:0 .25rem;}
+
+/* Footnote */
+.app-footer{background:var(--steel);color:rgba(255,255,255,.5);padding:.85rem 0;text-align:center;font-size:.72rem;margin-top:2rem;font-family:var(--mono);}
+
+@media(max-width:576px){
+  .input-row{grid-template-columns:1fr;}
+  .form-control,.form-select{width:100%;text-align:left;}
+  .card-body{padding:.75rem;}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="container-fluid px-3">
+    <div class="d-flex align-items-center gap-3">
+      <div class="header-icon">
+        <ph-ruler-cross-bold></ph-ruler-cross-bold>
+      </div>
+      <div>
+        <h1>Bridge Girder Angle Stack Calculator</h1>
+        <div class="subtitle">Camber gap analysis &amp; angle stacking layout</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container-fluid px-3 py-3" style="max-width:1140px;margin:0 auto;">
+<div class="row g-3">
+
+<!-- LEFT: Inputs -->
+<div class="col-12 col-lg-5">
+
+  <!-- Girder -->
+  <div class="calc-card">
+    <div class="card-hdr">
+      <span class="step-num">1</span>
+      <ph-line-segments-bold></ph-line-segments-bold> Girder
+    </div>
+    <div class="card-body">
+      <div class="input-row">
+        <div><div class="input-label">Girder length (ft)</div><div class="input-hint">Total length — centered on both sleds</div></div>
+        <input type="number" class="form-control" id="girderLen" value="100" min="10" max="600" step="1">
+      </div>
+      <div class="input-row">
+        <div><div class="input-label">Max gap to fill (in)</div><div class="input-hint">Measured from top of welded angle to flange — at worst point</div></div>
+        <input type="number" class="form-control" id="maxGap" value="5.0" min="0.1" max="24" step="0.125">
+      </div>
+      <div class="input-row">
+        <div><div class="input-label">Camber type</div><div class="input-hint">Affects gap profile along girder</div></div>
+        <select class="form-select" id="camberType">
+          <option value="up">Camber-Up (peak at center)</option>
+          <option value="down">Camber-Down (peak at ends)</option>
+          <option value="hat">Flat center, gaps at ends</option>
+          <option value="hatrev">Gap center, flat ends</option>
+        </select>
+      </div>
+      <div id="zoneInputs" style="display:none;">
+        <div class="input-row">
+          <div><div class="input-label">Outer flat length each side (ft)</div><div class="input-hint" id="outerHint">Flat section at each end</div></div>
+          <input type="number" class="form-control" id="outerFlat" value="10" min="0" max="200" step="1">
+        </div>
+        <div class="input-row">
+          <div><div class="input-label">Center length (ft)</div><div class="input-hint" id="centerHint">Middle section</div></div>
+          <input type="number" class="form-control" id="centerLen" value="40" min="0" max="400" step="1">
+        </div>
+        <div id="zoneSumNote" style="font-size:.74rem;padding:.45rem .6rem;border-radius:6px;margin-top:.3rem;line-height:1.5;"></div>
+      </div>
+      <!-- Camber descriptions -->
+      <div id="camberDesc" style="font-size:.75rem;color:var(--muted);margin-top:.6rem;padding:.5rem .6rem;background:var(--gray-bg);border-radius:6px;line-height:1.5;"></div>
+      <!-- Live diagram -->
+      <div class="camber-wrap">
+        <svg id="camberSvg" viewBox="0 0 600 130" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;"></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sleds -->
+  <div class="calc-card">
+    <div class="card-hdr">
+      <span class="step-num">2</span>
+      <ph-stack-bold></ph-stack-bold> Sleds
+    </div>
+    <div class="card-body">
+      <div class="input-row">
+        <div><div class="input-label">Sled length (ft)</div><div class="input-hint">Both sleds always the same length</div></div>
+        <input type="number" class="form-control" id="sledLen" value="50" min="5" max="300" step="1">
+      </div>
+      <div class="input-row">
+        <div><div class="input-label">Gap between sleds (ft)</div><div class="input-hint">Inner edge to inner edge (~2 ft)</div></div>
+        <input type="number" class="form-control" id="sledGap" value="2" min="0" max="20" step="0.5">
+      </div>
+      <div class="input-row">
+        <div><div class="input-label">Welded angles per sled</div><div class="input-hint">Count of fixed welded angles on each sled</div></div>
+        <input type="number" class="form-control" id="weldCount" value="10" min="2" max="30" step="1">
+      </div>
+      <div class="input-row">
+        <div><div class="input-label">Skip between stacks</div><div class="input-hint">Welded angles to skip between stacks (2-3 typical)</div></div>
+        <input type="number" class="form-control" id="skipCount" value="2" min="0" max="6" step="1">
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory -->
+  <div class="calc-card">
+    <div class="card-hdr">
+      <span class="step-num">3</span>
+      <ph-package-bold></ph-package-bold> Stackable Angle Inventory
+    </div>
+    <div class="card-body">
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.7rem;">
+        Pieces placed on top of welded angles to fill the gap. Enter your
+        <strong>total quantity</strong> of each thickness — this is the whole pool
+        shared across <strong>both sleds</strong> (e.g. 20 means 20 total, ~10 per sled).
+      </p>
+      <table class="inv-table">
+        <thead>
+          <tr><th>Thickness</th><th>Adds</th><th>Use?</th><th>Qty<br><span style='font-weight:400;text-transform:none;font-size:.62rem;'>(total, both sleds)</span></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="thk-lbl">1/8"</span></td>
+            <td><span class="adds-lbl">+0.125"</span></td>
+            <td><input type="checkbox" class="form-check-input" id="use0" checked></td>
+            <td><input type="number" class="form-control inv-qty" id="qty0" value="20" min="0" max="200"></td>
+          </tr>
+          <tr>
+            <td><span class="thk-lbl">1/4"</span></td>
+            <td><span class="adds-lbl">+0.250"</span></td>
+            <td><input type="checkbox" class="form-check-input" id="use1" checked></td>
+            <td><input type="number" class="form-control inv-qty" id="qty1" value="20" min="0" max="200"></td>
+          </tr>
+          <tr>
+            <td><span class="thk-lbl">3/8"</span></td>
+            <td><span class="adds-lbl">+0.375"</span></td>
+            <td><input type="checkbox" class="form-check-input" id="use2" checked></td>
+            <td><input type="number" class="form-control inv-qty" id="qty2" value="20" min="0" max="200"></td>
+          </tr>
+          <tr>
+            <td><span class="thk-lbl">1/2"</span></td>
+            <td><span class="adds-lbl">+0.500"</span></td>
+            <td><input type="checkbox" class="form-check-input" id="use3" checked></td>
+            <td><input type="number" class="form-control inv-qty" id="qty3" value="20" min="0" max="200"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <button class="btn-calc" onclick="calculate()">
+    <ph-calculator-bold style="font-size:1.1rem;"></ph-calculator-bold>
+    Calculate Stack Layout
+  </button>
+
+</div><!-- /left -->
+
+<!-- RIGHT: Results -->
+<div class="col-12 col-lg-7">
+
+  <!-- Placeholder -->
+  <div id="placeholder" class="calc-card" style="border:2px dashed var(--border);background:#fafcff;box-shadow:none;">
+    <div class="card-body text-center py-5">
+      <ph-graph-bold style="font-size:3rem;color:#b0c4de;display:block;margin-bottom:1rem;"></ph-graph-bold>
+      <div style="color:var(--muted);font-size:.9rem;font-weight:500;">Enter your inputs and click<br><strong>Calculate Stack Layout</strong></div>
+      <div style="color:#b0c4de;font-size:.78rem;margin-top:.5rem;font-family:var(--mono);">Results update instantly on every change</div>
+    </div>
+  </div>
+
+  <div id="results" class="results-section">
+    <div class="row g-2 mb-2" id="heroStats"></div>
+    <div class="row g-2 mb-2" id="statCards"></div>
+    <div class="calc-card">
+      <div class="card-hdr mid"><ph-chart-bar-bold></ph-chart-bar-bold> Piece Usage</div>
+      <div class="card-body" id="invSummary"></div>
+    </div>
+    <div class="calc-card">
+      <div class="card-hdr"><ph-stack-bold></ph-stack-bold> Stack Placement Visual</div>
+      <div class="card-body" id="stackVisual" style="overflow-x:auto;"></div>
+    </div>
+    <div id="layoutTables"></div>
+  </div>
+
+</div><!-- /right -->
+</div><!-- /row -->
+</main>
+
+<footer class="app-footer">
+  Bridge Girder Angle Stack Calculator &nbsp;·&nbsp; Gap spans full girder length &nbsp;·&nbsp;
+  Camber-Up · Camber-Down · Flat &nbsp;·&nbsp; Inventory-optimized · Sleds same length · Mirrored layout
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+
+// ── Combos table (1/8, 1/4, 3/8, 1/2) sorted ascending ──────────────────────
+// Dynamic combo solver replaces static COMBOS table
+
+const CAMBER_DESC = {
+  up:    '<strong>Camber-Up:</strong> Girder bows upward at center. Max gap at center, tapers smoothly to near-zero at both ends (parabolic).',
+  down:  '<strong>Camber-Down:</strong> Girder bows downward at center. Max gap at both ends, near-zero at center (parabolic).',
+  hat:   '<strong>Flat center, gaps at ends:</strong> Zero gap across the flat center zone; gap ramps up linearly through each end zone to the max gap at the outer tips. Set the three zone lengths below (left + center + right = girder length).',
+  hatrev:'<strong>Gap center, flat ends:</strong> Max gap across the center zone; gap ramps down linearly through each end zone to zero at the flat (resting) ends. Set the three zone lengths below.',
+};
+
+function V(id){ return parseFloat(document.getElementById(id).value)||0; }
+function getInventory(){
+  return [0,1,2,3].map(j=>
+    document.getElementById('use'+j).checked
+      ? (parseInt(document.getElementById('qty'+j).value)||0) : 0
+  );
+}
+
+// ── Gap at position along girder ──────────────────────────────────────────────
+// All positions measured in feet from girder left end
+// Camber curve spans full girder length
+function gapAtFt(xFt, girderFt, maxGap, type, seg){
+  // seg = {outer, taper, center} — five-segment trapezoid:
+  //   outer flat | taper | center | taper | outer flat   (totals girderFt)
+  const half  = girderFt/2;
+  const ratio = (xFt - half) / half;
+  if(type==='up')   return Math.max(0, maxGap*(1 - ratio*ratio));
+  if(type==='down') return Math.max(0, maxGap*(ratio*ratio));
+
+  const O = seg.outer, T = seg.taper, C = seg.center;
+  // Boundary x-positions from girder left end:
+  const b1 = O;            // end of left outer flat
+  const b2 = O + T;        // end of left taper
+  const b3 = O + T + C;    // end of center
+  const b4 = O + T + C + T;// end of right taper (= girderFt - O)
+
+  if(type==='hat'){
+    // HAT: flat center (0 gap), max gap at outer ends, linear taper between.
+    if(xFt <= b1) return maxGap;                       // left outer flat (high)
+    if(xFt <= b2){ if(T<=0) return maxGap;             // left taper down
+      return Math.max(0, maxGap*(1-(xFt-b1)/T)); }
+    if(xFt <= b3) return 0;                            // flat center (low)
+    if(xFt <= b4){ if(T<=0) return 0;                  // right taper up
+      return Math.max(0, maxGap*((xFt-b3)/T)); }
+    return maxGap;                                     // right outer flat (high)
+  }
+
+  if(type==='hatrev'){
+    // HATREV: 'gap center, flat ends' => outer flats=0 (resting), center=maxGap
+    if(xFt <= b1) return 0;                            // left outer flat (resting)
+    if(xFt <= b2){ if(T<=0) return 0;                  // left taper up
+      return Math.max(0, maxGap*((xFt-b1)/T)); }
+    if(xFt <= b3) return maxGap;                       // gap center (high)
+    if(xFt <= b4){ if(T<=0) return maxGap;             // right taper down
+      return Math.max(0, maxGap*(1-(xFt-b3)/T)); }
+    return 0;                                          // right outer flat (resting)
+  }
+  return maxGap;
+}
+
+// ── Best combo within 2× inventory ───────────────────────────────────────────
+function bestCombo(targetGap, inv){
+  // Dynamic greedy solver — builds the optimal combo for ANY gap height.
+  // Uses thickest pieces first (fewest pieces), respecting 2× inventory (both sleds).
+  // Thicknesses sorted descending for greedy fill.
+  if(targetGap<=0.001) return {total:0, pieces:0, desc:'None', c:[0,0,0,0]};
+  
+  const thicknesses = [0.500, 0.375, 0.250, 0.125]; // ½, ⅜, ¼, ⅛
+  const labels      = ['1/2"','3/8"','1/4"','1/8"'];
+  const invIdx      = [3, 2, 1, 0]; // map to inv[] indices (inv=[⅛,¼,⅜,½])
+  const tol = 0.03;
+  
+  let remaining = targetGap;
+  const used = [0,0,0,0]; // counts per thickness in inv[] order [⅛,¼,⅜,½]
+  let totalAdded = 0;
+  let totalPieces = 0;
+  const descParts = [];
+  
+  // Greedy: fill with thickest available first
+  for(let t=0; t<thicknesses.length; t++){
+    const thk = thicknesses[t];
+    const ii = invIdx[t]; // index into inv[]
+    const avail = Math.floor(inv[ii] / 2); // available per sled (2× reserved)
+    
+    if(avail <= 0 || remaining <= tol) continue;
+    
+    // How many of this thickness do we need?
+    let need = Math.floor((remaining + tol) / thk);
+    let use = Math.min(need, avail);
+    
+    if(use > 0){
+      used[ii] += use;
+      const added = use * thk;
+      totalAdded += added;
+      totalPieces += use;
+      remaining -= added;
+      
+      if(use === 1) descParts.push(labels[t]);
+      else descParts.push(labels[t] + ' ×' + use);
+    }
+  }
+  
+  // If we still have remaining gap and smallest piece can help
+  if(remaining > tol){
+    // Try one more smallest piece to close the gap
+    for(let t=thicknesses.length-1; t>=0; t--){
+      const thk = thicknesses[t];
+      const ii = invIdx[t];
+      const avail = Math.floor(inv[ii] / 2) - used[ii];
+      if(avail > 0 && remaining > 0){
+        used[ii] += 1;
+        totalAdded += thk;
+        totalPieces += 1;
+        remaining -= thk;
+        if(descParts.length > 0){
+          // Update or append
+          const existing = descParts.findIndex(p=>p.startsWith(labels[t]));
+          if(existing >= 0){
+            const oldCount = used[ii];
+            descParts[existing] = labels[t] + ' ×' + oldCount;
+          } else {
+            descParts.push(labels[t]);
+          }
+        } else {
+          descParts.push(labels[t]);
+        }
+        break;
+      }
+    }
+  }
+  
+  if(totalPieces === 0) return null;
+  
+  return {
+    total: Math.round(totalAdded * 1000) / 1000,
+    pieces: totalPieces,
+    desc: descParts.join(' + '),
+    c: [...used] // [⅛ count, ¼ count, ⅜ count, ½ count]
+  };
+}
+
+// ── Main solver ───────────────────────────────────────────────────────────────
+function solve(){
+  const girderFt = V('girderLen');
+  const maxGap   = V('maxGap');
+  const type     = document.getElementById('camberType').value;
+  const outerFlat = V('outerFlat');
+  const centerLen = V('centerLen');
+  const taperLen  = Math.max(0,(girderFt - 2*outerFlat - centerLen)/2);
+  const seg       = {outer:outerFlat, taper:taperLen, center:centerLen};
+  const sledFt   = V('sledLen');
+  const sledGapFt= V('sledGap');
+  const skipN    = Math.max(0, parseInt(document.getElementById('skipCount').value)||2);
+  const inv      = getInventory();
+
+  // Sled positions — girder centered on arrangement
+  const totalArr = 2*sledFt + sledGapFt;
+  const overhang = (girderFt - totalArr) / 2; // can be negative if sleds longer than girder
+  const s1Start  = Math.max(0, overhang);
+  const s1End    = s1Start + sledFt;
+  const s2Start  = s1End + sledGapFt;
+  const s2End    = s2Start + sledFt;
+
+  // Welded angle count — direct input
+  const nWeld = Math.min(30, Math.max(2, parseInt(document.getElementById('weldCount').value)||10));
+
+  // Generate positions for sled 1 — left to right (1 = outer left end)
+  const s1Positions = [];
+  for(let i=0;i<nWeld;i++){
+    const posInSled = (i/Math.max(nWeld-1,1))*sledFt; // ft from sled start
+    const posOnGirder = s1Start + posInSled;           // ft from girder left end
+    const gap   = Math.round(gapAtFt(posOnGirder,girderFt,maxGap,type,seg)*1000)/1000;
+    s1Positions.push({weldNum:i+1, label:`S1-${i+1}`, posInSled, posOnGirder, gap, above:gap});
+  }
+
+  // Sled 2 positions — mirror of sled 1
+  // Sled 2 numbered so that sled2 weld #1 = outer right end (far from center gap)
+  // and sled2 weld #N = inner end (toward center) — matching sled1 #N
+  const s2Positions = [];
+  for(let i=0;i<nWeld;i++){
+    // Mirror: position i on sled2 corresponds to position (nWeld-1-i) on sled1 spatially
+    // But we number sled2 from outer (right end) inward = 1..N right to left
+    const posInSled = (i/Math.max(nWeld-1,1))*sledFt; // ft from sled2 start (left of sled2)
+    const posOnGirder = s2Start + posInSled;
+    const gap   = Math.round(gapAtFt(posOnGirder,girderFt,maxGap,type,seg)*1000)/1000;
+    const weldNum = nWeld - i;
+    s2Positions.push({weldNum, label:`S2-${weldNum}`, posInSled, posOnGirder, gap, above:gap});
+  }
+
+  // Choose stack positions for sled 1 — fewest stacks while keeping the flange
+  // supported. A stack at position P "covers" up to skipN neighbors on each side,
+  // BUT only neighbors whose gap is close to P's gap (within one 1/2" step).
+  // Where the gap changes steeply, coverage is reduced so unsupported positions
+  // still get their own stack — stability is never sacrificed for fewer stacks.
+  const needStack1 = s1Positions.filter(p=>p.above>0.001);
+  const gapByNum = Object.fromEntries(s1Positions.map(p=>[p.weldNum, p.above]));
+  const COVER_TOL  = 0.5; // max gap difference (in) a single stack can bridge
+
+  const stackSet = new Set();
+  const covered  = new Set();
+
+  // Worst-gap first so tallest-need positions always anchor a stack
+  [...needStack1].sort((a,b)=>b.above-a.above).forEach(p=>{
+    if(covered.has(p.weldNum)) return;
+    stackSet.add(p.weldNum);
+    covered.add(p.weldNum);
+    // Extend coverage outward each direction, but stop early if the gap at the
+    // neighbor differs from this stack by more than COVER_TOL (steep taper)
+    [-1, 1].forEach(dir=>{
+      for(let step=1; step<=skipN; step++){
+        const nb = p.weldNum + dir*step;
+        if(gapByNum[nb]===undefined) break;
+        // Only cover this neighbor if its gap is close enough to bridge safely
+        if(Math.abs(gapByNum[nb]-p.above) > COVER_TOL) break;
+        covered.add(nb);
+      }
+    });
+  });
+
+  // Safety pass: any still-uncovered position that needs a stack gets one
+  needStack1.forEach(p=>{ if(!covered.has(p.weldNum)){
+    stackSet.add(p.weldNum);
+    covered.add(p.weldNum);
+  }});
+
+  // Assign combos — WORST GAP FIRST so biggest gaps get best pieces
+  const invLeft = [...inv];
+  const assignments = {};
+  const stackPositions = s1Positions
+    .filter(p=>stackSet.has(p.weldNum) && p.above>0.001)
+    .sort((a,b)=>b.above-a.above);  // largest gap first
+  stackPositions.forEach(p=>{
+    const combo = bestCombo(p.above, invLeft);
+    if(combo && combo.total>0){
+      combo.c.forEach((n,j)=>{ invLeft[j]-=n*2; });
+      assignments[p.weldNum]=combo;
+    } else {
+      assignments[p.weldNum]=null;
+    }
+  });
+
+  // Build result rows
+  function buildRows(positions, sledNum){
+    return positions.map(p=>{
+      const isStack = stackSet.has(p.weldNum) && p.above>0.001;
+      const combo   = isStack ? assignments[p.weldNum] : null;
+      const totalHt = combo ? Math.round(combo.total*1000)/1000 : 0;
+      let action;
+      if(p.above<=0.001)      action='ok';
+      else if(!isStack)       action='skip';
+      else if(combo)          action='stack';
+      else                    action='short';
+      return {...p, sledNum, combo, totalHt, action};
+    });
+  }
+
+  const rows1 = buildRows(s1Positions, 1);
+  // Sled 2 rows displayed in weldNum order (1=outer right first)
+  const rows2 = buildRows(s2Positions, 2).sort((a,b)=>a.weldNum-b.weldNum);
+
+  const used      = inv.map((q,j)=>q-invLeft[j]);
+  const remaining = [...invLeft];
+
+  return {
+    girderFt, maxGap, type, seg, sledFt, sledGapFt,
+    nWeld, skipN,
+    nStacks: stackSet.size,
+    s1Start, s1End, s2Start, s2End,
+    rows1, rows2, stackSet:[...stackSet],
+    used, remaining, inv,
+    overhang
+  };
+}
+
+// ── Render functions ──────────────────────────────────────────────────────────
+function calculate(){
+  const r=solve();
+  document.getElementById('placeholder').style.display='none';
+  document.getElementById('results').classList.add('visible');
+  renderHero(r);
+  renderStats(r);
+  renderInvSummary(r);
+  renderStackVisual(r);
+  renderLayout(r);
+  drawCamber(r);
+  updateCamberDesc();
+}
+
+function renderStackVisual(r){
+  const el = document.getElementById('stackVisual');
+  if(r.nStacks===0){
+    el.innerHTML = '<div style="color:var(--success);font-weight:600;font-size:.85rem;padding:.5rem 0;">'+
+      'No stacks needed — welded angles fill the gap at every position.</div>';
+    return;
+  }
+
+  const n = r.nWeld;
+  const s1 = r.rows1.slice().sort((a,b)=>a.weldNum-b.weldNum);
+  const s2 = r.rows2.slice().sort((a,b)=>b.weldNum-a.weldNum);
+
+  const maxGapVal = Math.max(0.001, ...s1.map(x=>x.gap), ...s2.map(x=>x.gap));
+  const allStacks = [...s1,...s2].map(x=>x.combo?x.combo.total:0);
+  const maxStackVal = Math.max(0.001, ...allStacks);
+  const maxBarPx = 70;
+
+  // Build one sled's HTML — welded dots along a bar, stack bars only where placed
+  function sledHtml(rows, label, sledClass){
+    // Container is a positioned div; welded dots placed proportionally along bottom
+    // Stack bars rise up from the dots that have stacks
+    const sledW = 100; // percentage width
+
+    let dotsHtml = '';
+    let barsHtml = '';
+    let labelsHtml = '';
+
+    rows.forEach((row, idx) => {
+      const pct = n>1 ? (idx/(n-1))*100 : 50;
+      const hasStack = row.action==='stack';
+      const dotColor = hasStack ? 'var(--accent)' : '#b0bec5';
+      const dotSize = hasStack ? 8 : 5;
+
+      // Welded angle dot — always shown
+      dotsHtml += '<div style="position:absolute;bottom:0;left:'+pct.toFixed(1)+'%;'+
+        'transform:translateX(-50%);width:'+dotSize+'px;height:'+dotSize+'px;'+
+        'background:'+dotColor+';border-radius:1px;" '+
+        'title="Position '+row.weldNum+'"></div>';
+
+      // Position number — show only at endpoints and stacked positions to avoid overlap
+      const showNum = hasStack || idx===0 || idx===n-1;
+      if(showNum){
+        labelsHtml += '<div style="position:absolute;bottom:-16px;left:'+pct.toFixed(1)+'%;'+
+          'transform:translateX(-50%);font-family:var(--mono);font-size:.58rem;'+
+          'color:'+(hasStack?'var(--accent)':'var(--muted)')+';'+
+          'font-weight:'+(hasStack?'700':'400')+';white-space:nowrap;">'+
+          row.weldNum+'</div>';
+      }
+
+      // Stack bar + label — ONLY at stacked positions
+      if(hasStack && row.combo){
+        const stackHt = row.combo ? row.combo.total : 0;
+        const barH = stackHt>0 ? Math.max(8, Math.round((stackHt/maxStackVal)*maxBarPx)) : 0;
+        const desc = row.combo.desc;
+        const ht = row.combo.total.toFixed(2);
+
+        barsHtml += '<div style="position:absolute;bottom:'+dotSize+'px;left:'+pct.toFixed(1)+'%;'+
+          'transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;">'+
+          '<div style="font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--steel);'+
+          'white-space:nowrap;margin-bottom:2px;">'+ht+'"</div>'+
+          '<div style="width:18px;height:'+barH+'px;'+
+          'background:linear-gradient(to top,#d97706,#fbbf24);'+
+          'border:1px solid #b45309;border-radius:3px 3px 0 0;'+
+          'position:relative;" title="'+desc+'">'+
+          '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'+
+          'font-size:.5rem;color:#fff;font-weight:700;">'+row.combo.pieces+'</div>'+
+          '</div>'+
+          '</div>';
+      }
+    });
+
+    return '<div style="flex:1;min-width:120px;">'+
+      '<div style="font-size:.7rem;font-weight:700;color:var(--steel);margin-bottom:2px;'+
+      'font-family:var(--mono);text-align:center;">'+label+'</div>'+
+      '<div style="position:relative;height:'+(maxBarPx+40)+'px;margin-bottom:20px;">'+
+        barsHtml+
+        '<div style="position:absolute;bottom:0;left:0;right:0;height:5px;'+
+        'background:'+sledClass+';border-radius:2px;"></div>'+
+        dotsHtml+
+        labelsHtml+
+      '</div>'+
+    '</div>';
+  }
+
+  // Center gap element
+  const gapHtml = '<div style="display:flex;flex-direction:column;align-items:center;'+
+    'justify-content:flex-end;min-width:24px;padding:0 2px;height:'+(maxBarPx+40)+'px;margin-bottom:20px;">'+
+    '<div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);'+
+    'writing-mode:vertical-rl;margin-bottom:4px;">GAP</div>'+
+    '<div style="flex:1;border-left:2px dashed #cbd5e1;min-height:20px;"></div>'+
+    '<div style="height:5px;width:100%;"></div>'+
+  '</div>';
+
+  // Outer-end labels
+  const outerLabels = '<div style="display:flex;justify-content:space-between;'+
+    'padding:0 2px;margin-top:4px;">'+
+    '<span style="font-size:.65rem;color:var(--muted);font-weight:600;">◄ Outer</span>'+
+    '<span style="font-size:.65rem;color:var(--muted);font-weight:600;">Outer ►</span>'+
+  '</div>';
+
+  el.innerHTML =
+    '<div style="overflow-x:auto;padding:.25rem 0;">'+
+      '<div style="display:flex;align-items:flex-end;gap:0;min-width:320px;">'+
+        sledHtml(s1, 'SLED 1', 'var(--steel)')+
+        gapHtml+
+        sledHtml(s2, 'SLED 2', 'var(--mid)')+
+      '</div>'+
+      outerLabels+
+    '</div>'+
+    '<div class="vis-legend">'+
+      '<span style="display:inline-block;width:12px;height:12px;background:linear-gradient(#fbbf24,#d97706);'+
+      'border:1px solid #b45309;border-radius:2px;vertical-align:middle;margin-right:3px;"></span> '+
+      'Stack placed (height labeled, piece count inside bar, hover for combo) &nbsp;·&nbsp; '+
+      '<span style="display:inline-block;width:8px;height:8px;background:var(--accent);'+
+      'border-radius:1px;vertical-align:middle;margin:0 3px;"></span> '+
+      'Welded angle with stack &nbsp;·&nbsp; '+
+      '<span style="display:inline-block;width:5px;height:5px;background:#b0bec5;'+
+      'border-radius:1px;vertical-align:middle;margin:0 3px;"></span> '+
+      'Welded angle only &nbsp;·&nbsp; '+
+      'Numbered 1 at outer ends, inward to center'+
+    '</div>';
+}
+
+
+function renderHero(r){
+  document.getElementById('heroStats').innerHTML=`
+    <div class="col-6">
+      <div class="result-hero">
+        <div class="big-num">${r.nStacks}</div>
+        <div class="big-lbl">Stacks per sled</div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="result-hero">
+        <div class="big-num">${r.nWeld}</div>
+        <div class="big-lbl">Welded positions/sled</div>
+      </div>
+    </div>`;
+}
+
+function renderStats(r){
+  const ovStr = r.overhang>=0
+    ? `${r.overhang.toFixed(2)} ft overhang each end`
+    : `Sleds extend ${Math.abs(r.overhang).toFixed(2)} ft beyond girder ends`;
+  const totalUsed = r.used.reduce((a,b)=>a+b,0);
+  document.getElementById('statCards').innerHTML=`
+    <div class="col-6 col-sm-3"><div class="stat-card">
+      <div class="stat-val">${r.maxGap}"</div><div class="stat-lbl">Max gap to fill</div></div></div>
+    <div class="col-6 col-sm-3"><div class="stat-card">
+      <div class="stat-val">${r.nStacks}</div><div class="stat-lbl">Stacks per sled</div></div></div>
+    <div class="col-6 col-sm-3"><div class="stat-card">
+      <div class="stat-val">${r.nStacks*2}</div><div class="stat-lbl">Total stacks</div></div></div>
+    <div class="col-6 col-sm-3"><div class="stat-card">
+      <div class="stat-val">${totalUsed}</div><div class="stat-lbl">Pieces used</div></div></div>
+    <div class="col-12"><div class="stat-card" style="text-align:left;">
+      <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:.3rem;">Positions on Girder</div>
+      <div class="mono" style="font-size:.8rem;color:var(--steel);">
+        <strong>Sled 1:</strong> ${r.s1Start.toFixed(2)} – ${r.s1End.toFixed(2)} ft &nbsp;|&nbsp;
+        <strong>Sled 2:</strong> ${r.s2Start.toFixed(2)} – ${r.s2End.toFixed(2)} ft
+        <br><span style="color:var(--muted);font-size:.72rem;">${ovStr}</span>
+      </div>
+    </div></div>`;
+}
+
+function renderInvSummary(r){
+  const lbls=['1/8"','1/4"','3/8"','1/2"'];
+  let html='';
+  lbls.forEach((lbl,j)=>{
+    if(r.inv[j]===0) return;
+    const tot=r.inv[j], used=r.used[j], rem=r.remaining[j];
+    const pct=tot>0?used/tot*100:0;
+    const cls=pct>90?'danger':pct>60?'warn':'';
+    html+=`<div class="inv-sum-row">
+      <span class="mono" style="font-weight:700;min-width:36px">${lbl}</span>
+      <div class="bar-wrap"><div class="bar-bg"><div class="bar-fill ${cls}" style="width:${pct.toFixed(0)}%"></div></div></div>
+      <span style="font-size:.78rem;color:var(--muted);min-width:150px;text-align:right">
+        <b style="color:var(--warn)">${used} used</b>
+        <span style="opacity:.7">(${used/2}/sled)</span> /
+        <b style="color:var(--success)">${rem} left</b>
+      </span></div>`;
+  });
+  const tu=r.used.reduce((a,b)=>a+b,0), ti=r.inv.reduce((a,b)=>a+b,0);
+  html+=`<div class="inv-sum-row">
+    <span style="font-weight:700">Total</span>
+    <div class="bar-wrap"></div>
+    <span style="font-size:.82rem"><b>${tu}</b> of ${ti} total pieces used across both sleds</span>
+  </div>`;
+  document.getElementById('invSummary').innerHTML=`<div style="padding:0 .1rem">${html}</div>`;
+}
+
+function tableRows(rows, r){
+  if(r.nStacks===0) return `<tr><td colspan="7" class="text-center py-3" style="color:var(--success);font-weight:600;">
+    <ph-check-circle-bold style="margin-right:.4rem;"></ph-check-circle-bold>
+    Welded angle height fills gap at all positions — no stacking needed</td></tr>`;
+  return rows.map(row=>{
+    let trClass='', badge='', pill='<span style="color:#aaa">—</span>';
+    if(row.action==='stack'){
+      trClass='row-stack';
+      badge=`<span class="badge-stack"><ph-stack-plus-bold></ph-stack-plus-bold> STACK HERE</span>`;
+      pill=`<span class="combo-pill">${row.combo.desc}</span>`;
+    } else if(row.action==='ok'){
+      trClass='row-ok';
+      badge=`<span class="badge-ok"><ph-check-bold></ph-check-bold> No stack needed</span>`;
+    } else if(row.action==='skip'){
+      trClass='row-skip';
+      badge=`<span class="badge-skip">Covered nearby</span>`;
+    } else {
+      trClass='row-stack';
+      badge=`<span class="badge-short"><ph-warning-bold></ph-warning-bold> Need more pieces</span>`;
+    }
+    const gapStyle = row.gap>0.001?'color:var(--warn);font-weight:700':'color:var(--muted)';
+    return `<tr class="${trClass}">
+      <td class="mono" style="font-weight:700">${row.label}</td>
+      <td class="mono">${(row.posInSled*12).toFixed(1)}"</td>
+      <td class="mono">${row.posOnGirder.toFixed(2)} ft</td>
+      <td class="mono" style="${gapStyle}">${row.gap.toFixed(3)}"</td>
+      <td style="white-space:normal;min-width:120px">${pill}</td>
+      <td class="mono" style="font-weight:700">${row.totalHt.toFixed(3)}"</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderLayout(r){
+  const thCols=`<thead><tr>
+    <th>Label</th><th>Pos on sled (in)</th><th>Pos on girder (ft)</th>
+    <th>Gap to fill</th>
+    <th>Stack combo</th><th>Stack height</th><th>Action</th>
+  </tr></thead>`;
+
+  const stackList1 = r.rows1.filter(x=>x.action==='stack').sort((a,b)=>a.weldNum-b.weldNum).map(x=>x.label).join(', ');
+  const stackList2 = r.rows2.filter(x=>x.action==='stack').sort((a,b)=>a.weldNum-b.weldNum).map(x=>x.label).join(', ');
+
+  document.getElementById('layoutTables').innerHTML=`
+    <div style="margin-top:.75rem">
+      <div class="sled-hdr">
+        <ph-arrow-right-bold></ph-arrow-right-bold> SLED 1
+        <span style="opacity:.65;font-size:.72rem;font-weight:400">
+          Numbered left→right (outer #1 → inner #${r.nWeld}) · skip ${r.skipN} between stacks
+          ${r.nStacks>0?' &nbsp;·&nbsp; Stacks at: '+stackList1:''}
+        </span>
+      </div>
+      <div class="layout-wrap">
+        <table class="layout-tbl">${thCols}<tbody>${tableRows(r.rows1,r)}</tbody></table>
+      </div>
+      <div class="sled-hdr s2">
+        <ph-arrow-left-bold></ph-arrow-left-bold> SLED 2
+        <span style="opacity:.65;font-size:.72rem;font-weight:400">
+          Mirror of Sled 1 — numbered right→left (outer #1 → inner #${r.nWeld}).
+          Same stack at same position-from-outer-end on both sleds.
+          ${r.nStacks>0?' &nbsp;·&nbsp; Stacks at: '+stackList2:''}
+        </span>
+      </div>
+      <div class="layout-wrap">
+        <table class="layout-tbl">${thCols}<tbody>${tableRows(r.rows2,r)}</tbody></table>
+      </div>
+    </div>`;
+}
+
+// ── Camber diagram ─────────────────────────────────────────────────────────
+function drawCamber(r){
+  const svg=document.getElementById('camberSvg');
+  const W=600, H=130, pad=32;
+  const gW=W-2*pad, gH=H-2*pad;
+
+  const girderFt = r ? r.girderFt : V('girderLen')||100;
+  const maxGap   = r ? r.maxGap   : V('maxGap')||5;
+  const type     = r ? r.type     : document.getElementById('camberType').value;
+  const _of = r ? r.seg.outer : (V('outerFlat')||10);
+  const _cl = r ? r.seg.center : (V('centerLen')||40);
+  const _tp = r ? r.seg.taper : Math.max(0,(girderFt-2*_of-_cl)/2);
+  const seg = {outer:_of, taper:_tp, center:_cl};
+  const sledFt   = r ? r.sledFt   : V('sledLen')||50;
+  const sledGapFt= r ? r.sledGapFt: V('sledGap')||2;
+
+  const totalArr  = 2*sledFt+sledGapFt;
+  const overhang  = (girderFt-totalArr)/2;
+  const s1Start_ft = overhang;
+  const s1End_ft   = overhang + sledFt;
+  const s2Start_ft = overhang + sledFt + sledGapFt;
+  const s2End_ft   = overhang + 2*sledFt + sledGapFt;
+  // Scale both sleds identically — no asymmetric clamping
+  const scale = ft => Math.min(1, Math.max(0, ft / girderFt));
+  const s1StartRatio = scale(s1Start_ft);
+  const s1EndRatio   = scale(s1End_ft);
+  const s2StartRatio = scale(s2Start_ft);
+  const s2EndRatio   = scale(s2End_ft);
+
+  // Curve
+  let pathPts=[];
+  let sampleXs=[];
+  const {outer:_O, taper:_T, center:_C} = seg;
+  if(type==='hat' || type==='hatrev'){
+    sampleXs=[0, _O, _O+_T, _O+_T+_C, _O+_T+_C+_T, girderFt];
+  } else {
+    // Parabolic — sample densely for a smooth curve
+    for(let i=0;i<=80;i++) sampleXs.push((i/80)*girderFt);
+  }
+  sampleXs.forEach(xFt=>{
+    const g=gapAtFt(xFt,girderFt,maxGap,type,seg);
+    const gNorm=maxGap>0?g/maxGap:0;
+    const x=pad+(xFt/girderFt)*gW;
+    const y=pad+gH*(1-gNorm);
+    pathPts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  });
+  const pathD='M'+pathPts.join(' L');
+
+  // Build segment boundary markers for trapezoidal types
+  // Sled + baseline geometry (defined before segment markers that reference baseY)
+  const sledH=10;
+  const s1x=pad+s1StartRatio*gW;
+  const s1w=(s1EndRatio-s1StartRatio)*gW;
+  const s2x=pad+s2StartRatio*gW;
+  const s2w=(s2EndRatio-s2StartRatio)*gW;
+  const sledY=H-pad-sledH;
+  const baseY=H-pad-sledH-4;  // girder chord line
+
+  let segmentMarkers = '';
+  if(type==='hat' || type==='hatrev'){
+    const bounds=[0, _O, _O+_T, _O+_T+_C, _O+_T+_C+_T, girderFt];
+    const segNames=['flat','taper','center','taper','flat'];
+    // vertical dashed boundary lines
+    for(let i=1;i<bounds.length-1;i++){
+      const bx=pad+(bounds[i]/girderFt)*gW;
+      segmentMarkers+=`<line x1="${bx.toFixed(1)}" y1="${pad}" x2="${bx.toFixed(1)}" y2="${baseY}" stroke="#cbd5e1" stroke-width="0.75" stroke-dasharray="2 2"/>`;
+    }
+    // segment length labels centered in each segment, near top
+    for(let i=0;i<5;i++){
+      const mid=pad+((bounds[i]+bounds[i+1])/2/girderFt)*gW;
+      const segLen=bounds[i+1]-bounds[i];
+      if(segLen<=0.05) continue;
+      segmentMarkers+=`<text x="${mid.toFixed(1)}" y="${pad+9}" text-anchor="middle" font-size="7" fill="#64748b" font-family="monospace">${segLen.toFixed(segLen%1===0?0:1)}'</text>`;
+      segmentMarkers+=`<text x="${mid.toFixed(1)}" y="${pad+17}" text-anchor="middle" font-size="6" fill="#94a3b8" font-family="monospace">${segNames[i]}</text>`;
+    }
+  }
+
+  svg.innerHTML=`
+    <rect x="${pad}" y="${pad}" width="${gW}" height="${gH}" rx="5" fill="#f0f6ff" stroke="#d0dae8" stroke-width="1"/>
+    <!-- Chord line -->
+    <line x1="${pad}" y1="${baseY}" x2="${pad+gW}" y2="${baseY}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 3"/>
+    <!-- Camber curve -->
+    <path d="${pathD}" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="miter"/>
+    <!-- Gap arrow at worst point -->
+    ${(type==='up'||type==='hatrev')?`
+      <text x="${pad+gW/2+5}" y="${pad+gH*0.4}" font-size="9" fill="#b45309" font-family="monospace">${maxGap}"</text>`:''}
+    ${(type==='down'||type==='hat')?`
+      <text x="${pad+12}" y="${pad+gH*0.4}" font-size="9" fill="#b45309" font-family="monospace">${maxGap}"</text>
+      <text x="${pad+gW-30}" y="${pad+gH*0.4}" font-size="9" fill="#b45309" font-family="monospace">${maxGap}"</text>`:''}
+    <!-- Sled 1 -->
+    <rect x="${s1x}" y="${sledY}" width="${s1w}" height="${sledH}" rx="2" fill="#1a3a5c" opacity="0.85"/>
+    <text x="${s1x+s1w/2}" y="${sledY-3}" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace" font-weight="bold">SLED 1</text>
+    <!-- Sled 2 -->
+    <rect x="${s2x}" y="${sledY}" width="${s2w}" height="${sledH}" rx="2" fill="#2563a8" opacity="0.85"/>
+    <text x="${s2x+s2w/2}" y="${sledY-3}" text-anchor="middle" font-size="8" fill="#2563a8" font-family="monospace" font-weight="bold">SLED 2</text>
+    <!-- Girder ends -->
+    <line x1="${pad}" y1="${pad+4}" x2="${pad}" y2="${baseY}" stroke="#94a3b8" stroke-width="1.5"/>
+    <line x1="${pad+gW}" y1="${pad+4}" x2="${pad+gW}" y2="${baseY}" stroke="#94a3b8" stroke-width="1.5"/>
+    <!-- Labels -->
+    <text x="${pad}" y="${H-2}" font-size="8" fill="#94a3b8" font-family="monospace">Left end</text>
+    <text x="${pad+gW}" y="${H-2}" font-size="8" fill="#94a3b8" font-family="monospace" text-anchor="end">Right end</text>
+    <text x="${pad+gW/2}" y="${H-2}" font-size="8" fill="#94a3b8" font-family="monospace" text-anchor="middle">Center</text>
+    ${segmentMarkers}`;
+}
+
+function updateCamberDesc(){
+  const type=document.getElementById('camberType').value;
+  document.getElementById('camberDesc').innerHTML=CAMBER_DESC[type];
+  const showZones = (type==='hat'||type==='hatrev');
+  document.getElementById('zoneInputs').style.display = showZones ? 'block' : 'none';
+  if(showZones){
+    document.getElementById('outerHint').textContent = (type==='hat')
+      ? 'Flat high section (full gap) at each outer end'
+      : 'Flat resting section (zero gap) at each outer end';
+    document.getElementById('centerHint').textContent = (type==='hat')
+      ? 'Flat low section (zero gap) in the middle'
+      : 'Full-gap section in the middle';
+    validateZones();
+  }
+}
+
+function validateZones(){
+  const girder = V('girderLen');
+  const outer  = V('outerFlat');
+  const center = V('centerLen');
+  const taper  = (girder - 2*outer - center)/2;
+  const note   = document.getElementById('zoneSumNote');
+  if(taper < 0){
+    note.style.background = '#fee2e2';
+    note.style.color = '#b91c1c';
+    note.innerHTML = '⚠ Outer flats + center ('+(2*outer+center).toFixed(0)+
+      ' ft) exceed girder length ('+girder.toFixed(0)+' ft). Reduce a length.';
+  } else {
+    note.style.background = '#dcfce7';
+    note.style.color = '#15803d';
+    note.innerHTML =
+      '✓ <b>'+outer.toFixed(0)+'</b> flat &nbsp;|&nbsp; <b>'+taper.toFixed(1)+
+      '</b> taper &nbsp;|&nbsp; <b>'+center.toFixed(0)+'</b> center &nbsp;|&nbsp; <b>'+
+      taper.toFixed(1)+'</b> taper &nbsp;|&nbsp; <b>'+outer.toFixed(0)+
+      '</b> flat &nbsp;=&nbsp; '+girder.toFixed(0)+' ft<br>'+
+      '<span style="opacity:.75">Taper length auto-calculated: ('+girder.toFixed(0)+
+      ' − 2×'+outer.toFixed(0)+' − '+center.toFixed(0)+') ÷ 2 = '+taper.toFixed(1)+' ft each</span>';
+  }
+}
+
+// ── Wire all inputs to auto-recalc ────────────────────────────────────────────
+const allInputs=[
+  'girderLen','maxGap','camberType','outerFlat','centerLen',
+  'sledLen','sledGap','weldCount','skipCount',
+  'use0','use1','use2','use3','qty0','qty1','qty2','qty3'
+];
+allInputs.forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  let _t;
+  const onChange = ()=>{
+    updateCamberDesc();
+    drawCamber(null);
+    clearTimeout(_t);
+    _t=setTimeout(()=>{
+      if(document.getElementById('results').classList.contains('visible')) calculate();
+    },150);
+  };
+  el.addEventListener('input', onChange);
+  el.addEventListener('change', onChange);
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+updateCamberDesc();
+drawCamber(null);
+</script>
+</body>
+</html>
