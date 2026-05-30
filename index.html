@@ -751,15 +751,15 @@ function renderStats(r){
   document.getElementById('statCards').innerHTML=`
     <div class="row g-2">
       <div class="col-6 col-sm-4 col-lg">
-        <div class="stat-card">
-          <div class="stat-val" style="font-size:1.6rem">${r.nStacks}</div>
-          <div class="stat-lbl">Stacks / sled</div>
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--steel) 0%,#0f2540 100%);border-color:var(--steel);">
+          <div class="stat-val" style="font-size:1.6rem;color:#fcd34d;">${r.nStacks}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,0.7);">Stacks / sled</div>
         </div>
       </div>
       <div class="col-6 col-sm-4 col-lg">
-        <div class="stat-card">
-          <div class="stat-val" style="font-size:1.6rem">${r.nWeld}</div>
-          <div class="stat-lbl">Welded / sled</div>
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--mid) 0%,var(--steel) 100%);border-color:var(--mid);">
+          <div class="stat-val" style="font-size:1.6rem;color:#fcd34d;">${r.nWeld}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,0.7);">Welded / sled</div>
         </div>
       </div>
       <div class="col-6 col-sm-4 col-lg">
@@ -1064,5 +1064,3 @@ drawCamber(null);
 </script>
 </body>
 </html>
-
-
