@@ -21,44 +21,6 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100vh;}
 
-/* Header */
-.app-header{
-  background:linear-gradient(120deg,#0f2540 0%,var(--steel) 45%,#1f4a78 100%);
-  color:#fff;padding:1.4rem 0;position:sticky;top:0;z-index:100;
-  box-shadow:0 6px 28px rgba(15,37,64,0.4);
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  overflow:hidden;
-}
-.app-header::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--accent) 0%,#f59e0b 50%,var(--accent) 100%);
-}
-.app-header::after{
-  content:'';position:absolute;right:-60px;top:50%;transform:translateY(-50%);
-  width:280px;height:280px;border-radius:50%;
-  background:radial-gradient(circle,rgba(217,119,6,0.12) 0%,transparent 70%);
-  pointer-events:none;
-}
-.header-icon{
-  width:52px;height:52px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--accent) 0%,#b45309 100%);
-  border-radius:14px;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 14px rgba(217,119,6,0.45);
-  transform:rotate(-4deg);transition:transform .25s;
-}
-.header-icon:hover{transform:rotate(0deg) scale(1.05);}
-.header-icon ph-ruler-cross-bold{font-size:1.7rem;color:#fff;}
-.app-header h1{
-  font-size:clamp(1.05rem,2.6vw,1.55rem);font-weight:700;margin:0;
-  letter-spacing:-0.02em;line-height:1.15;
-  background:linear-gradient(90deg,#ffffff 0%,#cfe0f5 100%);
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.app-header .subtitle{
-  font-size:0.8rem;color:#9db8d8;margin-top:4px;font-weight:500;
-  letter-spacing:0.02em;
-}
 
 /* Cards */
 .calc-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:1.1rem;overflow:hidden;}
@@ -128,7 +90,7 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
 .bar-fill.danger{background:#dc2626;}
 
 /* Camber diagram */
-.camber-wrap{background:var(--gray-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;margin-top:.75rem;}
+.camber-wrap{background:var(--gray-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;}
 #camberSvg{width:100%;height:auto;display:block;}
 
 /* No-stack alert */
@@ -141,160 +103,185 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
 /* Footnote */
 .app-footer{background:var(--steel);color:rgba(255,255,255,.5);padding:.85rem 0;text-align:center;font-size:.72rem;margin-top:2rem;font-family:var(--mono);}
 
-@media(max-width:576px){
+/* Responsive: stack to single column below md */
+@media(max-width:767px){
   .input-row{grid-template-columns:1fr;}
   .form-control,.form-select{width:100%;text-align:left;}
   .card-body{padding:.75rem;}
+  .result-hero .big-num{font-size:2rem;}
+}
+/* Wide screens: maximize whitespace use */
+@media(min-width:1400px){
+  .card-body{padding:1rem 1.25rem;}
+  .layout-tbl{font-size:.85rem;}
+  .layout-tbl tbody td,.layout-tbl thead th{padding:.55rem .9rem;}
 }
 </style>
 </head>
 <body>
 
-<header class="app-header">
-  <div class="container-fluid px-3">
-    <div class="d-flex align-items-center gap-3">
-      <div class="header-icon">
-        <ph-ruler-cross-bold></ph-ruler-cross-bold>
+
+
+<main class="container-fluid px-3 py-3" style="max-width:1600px;margin:0 auto;">
+<!-- ── ROW 1: Three input columns across top ── -->
+<div class="row g-3 mb-3">
+
+  <!-- Column 1: Girder -->
+  <div class="col-12 col-md-4 d-flex flex-column">
+    <div class="calc-card flex-fill">
+      <div class="card-hdr">
+        <span class="step-num">1</span>
+        <ph-line-segments-bold></ph-line-segments-bold> Girder
       </div>
-      <div>
-        <h1>Bridge Girder Angle Stack Calculator</h1>
-        <div class="subtitle">Camber gap analysis &amp; angle stacking layout</div>
+      <div class="card-body">
+        <div class="input-row">
+          <div><div class="input-label">Girder length (ft)</div><div class="input-hint">Total length — centered on both sleds</div></div>
+          <input type="number" class="form-control" id="girderLen" value="100" min="10" max="600" step="1">
+        </div>
+        <div class="input-row">
+          <div><div class="input-label">Max gap to fill (in)</div><div class="input-hint">Measured from top of welded angle to flange — at worst point</div></div>
+          <input type="number" class="form-control" id="maxGap" value="5.0" min="0.1" max="24" step="0.125">
+        </div>
+        <div class="input-row">
+          <div><div class="input-label">Camber type</div><div class="input-hint">Affects gap profile along girder</div></div>
+          <select class="form-select" id="camberType">
+            <option value="up">Camber-Up (peak at center)</option>
+            <option value="down">Camber-Down (peak at ends)</option>
+            <option value="hat">Flat center, gaps at ends</option>
+            <option value="hatrev">Gap center, flat ends</option>
+          </select>
+        </div>
+        <div id="zoneInputs" style="display:none;">
+          <div class="input-row">
+            <div><div class="input-label">Outer flat length each side (ft)</div><div class="input-hint" id="outerHint">Flat section at each end</div></div>
+            <input type="number" class="form-control" id="outerFlat" value="10" min="0" max="200" step="1">
+          </div>
+          <div class="input-row">
+            <div><div class="input-label">Center length (ft)</div><div class="input-hint" id="centerHint">Middle section</div></div>
+            <input type="number" class="form-control" id="centerLen" value="40" min="0" max="400" step="1">
+          </div>
+          <div id="zoneSumNote" style="font-size:.74rem;padding:.45rem .6rem;border-radius:6px;margin-top:.3rem;line-height:1.5;"></div>
+        </div>
+        <div id="camberDesc" style="font-size:.75rem;color:var(--muted);margin-top:.6rem;padding:.5rem .6rem;background:var(--gray-bg);border-radius:6px;line-height:1.5;"></div>
       </div>
     </div>
   </div>
-</header>
 
-<main class="container-fluid px-3 py-3" style="max-width:1140px;margin:0 auto;">
+  <!-- Column 2: Sleds -->
+  <div class="col-12 col-md-4 d-flex flex-column">
+    <div class="calc-card flex-fill">
+      <div class="card-hdr">
+        <span class="step-num">2</span>
+        <ph-stack-bold></ph-stack-bold> Sleds
+      </div>
+      <div class="card-body">
+        <div class="input-row">
+          <div><div class="input-label">Sled length (ft)</div><div class="input-hint">Both sleds always the same length</div></div>
+          <input type="number" class="form-control" id="sledLen" value="50" min="5" max="300" step="1">
+        </div>
+        <div class="input-row">
+          <div><div class="input-label">Gap between sleds (ft)</div><div class="input-hint">Inner edge to inner edge (~2 ft)</div></div>
+          <input type="number" class="form-control" id="sledGap" value="2" min="0" max="20" step="0.5">
+        </div>
+        <div class="input-row">
+          <div><div class="input-label">Welded angles per sled</div><div class="input-hint">Count of fixed welded angles on each sled</div></div>
+          <input type="number" class="form-control" id="weldCount" value="10" min="2" max="30" step="1">
+        </div>
+        <div class="input-row">
+          <div><div class="input-label">Skip between stacks</div><div class="input-hint">Welded angles to skip between stacks (2-3 typical)</div></div>
+          <input type="number" class="form-control" id="skipCount" value="2" min="0" max="6" step="1">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Column 3: Inventory + Calculate -->
+  <div class="col-12 col-md-4 d-flex flex-column">
+    <div class="calc-card flex-fill">
+      <div class="card-hdr">
+        <span class="step-num">3</span>
+        <ph-package-bold></ph-package-bold> Stackable Angle Inventory
+      </div>
+      <div class="card-body">
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:.7rem;">
+          Enter your <strong>total quantity</strong> of each thickness —
+          shared across <strong>both sleds</strong> (e.g. 20 total ≈ 10 per sled).
+        </p>
+        <table class="inv-table">
+          <thead>
+            <tr><th>Thickness</th><th>Adds</th><th>Use?</th><th>Qty (both sleds)</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="thk-lbl">1/8"</span></td>
+              <td><span class="adds-lbl">+0.125"</span></td>
+              <td><input type="checkbox" class="form-check-input" id="use0" checked></td>
+              <td><input type="number" class="form-control inv-qty" id="qty0" value="20" min="0" max="200"></td>
+            </tr>
+            <tr>
+              <td><span class="thk-lbl">1/4"</span></td>
+              <td><span class="adds-lbl">+0.250"</span></td>
+              <td><input type="checkbox" class="form-check-input" id="use1" checked></td>
+              <td><input type="number" class="form-control inv-qty" id="qty1" value="20" min="0" max="200"></td>
+            </tr>
+            <tr>
+              <td><span class="thk-lbl">3/8"</span></td>
+              <td><span class="adds-lbl">+0.375"</span></td>
+              <td><input type="checkbox" class="form-check-input" id="use2" checked></td>
+              <td><input type="number" class="form-control inv-qty" id="qty2" value="20" min="0" max="200"></td>
+            </tr>
+            <tr>
+              <td><span class="thk-lbl">1/2"</span></td>
+              <td><span class="adds-lbl">+0.500"</span></td>
+              <td><input type="checkbox" class="form-check-input" id="use3" checked></td>
+              <td><input type="number" class="form-control inv-qty" id="qty3" value="20" min="0" max="200"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /input row -->
+
+<!-- ── Diagram + Calculate row ── -->
+<div class="row g-3 mb-3">
+  <div class="col-12 col-lg-8">
+    <div class="calc-card h-100">
+      <div class="card-hdr">
+        <ph-chart-line-bold></ph-chart-line-bold> Camber Profile — Gap Along Girder Length
+      </div>
+      <div class="card-body">
+        <div id="camberDescRow" style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem;padding:.45rem .6rem;background:var(--gray-bg);border-radius:6px;line-height:1.5;"></div>
+        <div class="camber-wrap" style="margin-top:0;">
+          <svg id="camberSvgRow" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-4 d-flex flex-column" style="min-height:0;">
+    <div class="calc-card flex-fill d-flex flex-column" style="background:var(--pale);border-color:var(--light);">
+      <div class="card-body d-flex flex-column" style="padding:1rem 1.1rem;">
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.6;">
+          <strong style="color:var(--steel);">How it works:</strong><br>
+          Enter your 7 inputs across the three steps above, then click Calculate.
+          The solver finds the fewest stacks needed, assigns the best angle combination
+          at each position, and mirrors the layout across both sleds.
+        </div>
+        <div class="mt-auto pt-3">
+          <button class="btn-calc w-100" onclick="calculate()" style="font-size:1.1rem;padding:1.1rem 2rem;">
+            <ph-calculator-bold style="font-size:1.3rem;"></ph-calculator-bold>
+            Calculate Stack Layout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ROW 2: Full-width results ── -->
 <div class="row g-3">
-
-<!-- LEFT: Inputs -->
-<div class="col-12 col-lg-5">
-
-  <!-- Girder -->
-  <div class="calc-card">
-    <div class="card-hdr">
-      <span class="step-num">1</span>
-      <ph-line-segments-bold></ph-line-segments-bold> Girder
-    </div>
-    <div class="card-body">
-      <div class="input-row">
-        <div><div class="input-label">Girder length (ft)</div><div class="input-hint">Total length — centered on both sleds</div></div>
-        <input type="number" class="form-control" id="girderLen" value="100" min="10" max="600" step="1">
-      </div>
-      <div class="input-row">
-        <div><div class="input-label">Max gap to fill (in)</div><div class="input-hint">Measured from top of welded angle to flange — at worst point</div></div>
-        <input type="number" class="form-control" id="maxGap" value="5.0" min="0.1" max="24" step="0.125">
-      </div>
-      <div class="input-row">
-        <div><div class="input-label">Camber type</div><div class="input-hint">Affects gap profile along girder</div></div>
-        <select class="form-select" id="camberType">
-          <option value="up">Camber-Up (peak at center)</option>
-          <option value="down">Camber-Down (peak at ends)</option>
-          <option value="hat">Flat center, gaps at ends</option>
-          <option value="hatrev">Gap center, flat ends</option>
-        </select>
-      </div>
-      <div id="zoneInputs" style="display:none;">
-        <div class="input-row">
-          <div><div class="input-label">Outer flat length each side (ft)</div><div class="input-hint" id="outerHint">Flat section at each end</div></div>
-          <input type="number" class="form-control" id="outerFlat" value="10" min="0" max="200" step="1">
-        </div>
-        <div class="input-row">
-          <div><div class="input-label">Center length (ft)</div><div class="input-hint" id="centerHint">Middle section</div></div>
-          <input type="number" class="form-control" id="centerLen" value="40" min="0" max="400" step="1">
-        </div>
-        <div id="zoneSumNote" style="font-size:.74rem;padding:.45rem .6rem;border-radius:6px;margin-top:.3rem;line-height:1.5;"></div>
-      </div>
-      <!-- Camber descriptions -->
-      <div id="camberDesc" style="font-size:.75rem;color:var(--muted);margin-top:.6rem;padding:.5rem .6rem;background:var(--gray-bg);border-radius:6px;line-height:1.5;"></div>
-      <!-- Live diagram -->
-      <div class="camber-wrap">
-        <svg id="camberSvg" viewBox="0 0 600 130" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;"></svg>
-      </div>
-    </div>
-  </div>
-
-  <!-- Sleds -->
-  <div class="calc-card">
-    <div class="card-hdr">
-      <span class="step-num">2</span>
-      <ph-stack-bold></ph-stack-bold> Sleds
-    </div>
-    <div class="card-body">
-      <div class="input-row">
-        <div><div class="input-label">Sled length (ft)</div><div class="input-hint">Both sleds always the same length</div></div>
-        <input type="number" class="form-control" id="sledLen" value="50" min="5" max="300" step="1">
-      </div>
-      <div class="input-row">
-        <div><div class="input-label">Gap between sleds (ft)</div><div class="input-hint">Inner edge to inner edge (~2 ft)</div></div>
-        <input type="number" class="form-control" id="sledGap" value="2" min="0" max="20" step="0.5">
-      </div>
-      <div class="input-row">
-        <div><div class="input-label">Welded angles per sled</div><div class="input-hint">Count of fixed welded angles on each sled</div></div>
-        <input type="number" class="form-control" id="weldCount" value="10" min="2" max="30" step="1">
-      </div>
-      <div class="input-row">
-        <div><div class="input-label">Skip between stacks</div><div class="input-hint">Welded angles to skip between stacks (2-3 typical)</div></div>
-        <input type="number" class="form-control" id="skipCount" value="2" min="0" max="6" step="1">
-      </div>
-    </div>
-  </div>
-
-  <!-- Inventory -->
-  <div class="calc-card">
-    <div class="card-hdr">
-      <span class="step-num">3</span>
-      <ph-package-bold></ph-package-bold> Stackable Angle Inventory
-    </div>
-    <div class="card-body">
-      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.7rem;">
-        Pieces placed on top of welded angles to fill the gap. Enter your
-        <strong>total quantity</strong> of each thickness — this is the whole pool
-        shared across <strong>both sleds</strong> (e.g. 20 means 20 total, ~10 per sled).
-      </p>
-      <table class="inv-table">
-        <thead>
-          <tr><th>Thickness</th><th>Adds</th><th>Use?</th><th>Qty<br><span style='font-weight:400;text-transform:none;font-size:.62rem;'>(total, both sleds)</span></th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="thk-lbl">1/8"</span></td>
-            <td><span class="adds-lbl">+0.125"</span></td>
-            <td><input type="checkbox" class="form-check-input" id="use0" checked></td>
-            <td><input type="number" class="form-control inv-qty" id="qty0" value="20" min="0" max="200"></td>
-          </tr>
-          <tr>
-            <td><span class="thk-lbl">1/4"</span></td>
-            <td><span class="adds-lbl">+0.250"</span></td>
-            <td><input type="checkbox" class="form-check-input" id="use1" checked></td>
-            <td><input type="number" class="form-control inv-qty" id="qty1" value="20" min="0" max="200"></td>
-          </tr>
-          <tr>
-            <td><span class="thk-lbl">3/8"</span></td>
-            <td><span class="adds-lbl">+0.375"</span></td>
-            <td><input type="checkbox" class="form-check-input" id="use2" checked></td>
-            <td><input type="number" class="form-control inv-qty" id="qty2" value="20" min="0" max="200"></td>
-          </tr>
-          <tr>
-            <td><span class="thk-lbl">1/2"</span></td>
-            <td><span class="adds-lbl">+0.500"</span></td>
-            <td><input type="checkbox" class="form-check-input" id="use3" checked></td>
-            <td><input type="number" class="form-control inv-qty" id="qty3" value="20" min="0" max="200"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <button class="btn-calc" onclick="calculate()">
-    <ph-calculator-bold style="font-size:1.1rem;"></ph-calculator-bold>
-    Calculate Stack Layout
-  </button>
-
-</div><!-- /left -->
-
-<!-- RIGHT: Results -->
-<div class="col-12 col-lg-7">
+<div class="col-12">
 
   <!-- Placeholder -->
   <div id="placeholder" class="calc-card" style="border:2px dashed var(--border);background:#fafcff;box-shadow:none;">
@@ -306,27 +293,29 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
   </div>
 
   <div id="results" class="results-section">
-    <div class="row g-2 mb-2" id="heroStats"></div>
-    <div class="row g-2 mb-2" id="statCards"></div>
+    <!-- Hero + stat cards: two-column mini grid -->
+    <div id="hero1" style="display:none;"></div>
+    <div id="hero2" style="display:none;"></div>
+    <div class="mb-2" id="statCards"></div>
+    <!-- Piece usage full width -->
     <div class="calc-card">
       <div class="card-hdr mid"><ph-chart-bar-bold></ph-chart-bar-bold> Piece Usage</div>
       <div class="card-body" id="invSummary"></div>
     </div>
+    <!-- Stack visual full width -->
     <div class="calc-card">
       <div class="card-hdr"><ph-stack-bold></ph-stack-bold> Stack Placement Visual</div>
-      <div class="card-body" id="stackVisual" style="overflow-x:auto;"></div>
+      <div class="card-body" id="stackVisual"></div>
     </div>
+    <!-- Layout tables full width -->
     <div id="layoutTables"></div>
   </div>
 
-</div><!-- /right -->
-</div><!-- /row -->
+</div>
+</div><!-- /results row -->
 </main>
 
-<footer class="app-footer">
-  Bridge Girder Angle Stack Calculator &nbsp;·&nbsp; Gap spans full girder length &nbsp;·&nbsp;
-  Camber-Up · Camber-Down · Flat &nbsp;·&nbsp; Inventory-optimized · Sleds same length · Mirrored layout
-</footer>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -744,19 +733,11 @@ function renderStackVisual(r){
 
 
 function renderHero(r){
-  document.getElementById('heroStats').innerHTML=`
-    <div class="col-6">
-      <div class="result-hero">
-        <div class="big-num">${r.nStacks}</div>
-        <div class="big-lbl">Stacks per sled</div>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="result-hero">
-        <div class="big-num">${r.nWeld}</div>
-        <div class="big-lbl">Welded positions/sled</div>
-      </div>
-    </div>`;
+  // Hero numbers now shown in stat card row — kept for compatibility
+  const h1=document.getElementById('hero1');
+  const h2=document.getElementById('hero2');
+  if(h1) h1.innerHTML='';
+  if(h2) h2.innerHTML='';
 }
 
 function renderStats(r){
@@ -764,23 +745,52 @@ function renderStats(r){
     ? `${r.overhang.toFixed(2)} ft overhang each end`
     : `Sleds extend ${Math.abs(r.overhang).toFixed(2)} ft beyond girder ends`;
   const totalUsed = r.used.reduce((a,b)=>a+b,0);
+
+  // One responsive row — 6 stat tiles + 1 positions tile
+  // col-6 on mobile (2 per row), col on larger screens (all in one row)
   document.getElementById('statCards').innerHTML=`
-    <div class="col-6 col-sm-3"><div class="stat-card">
-      <div class="stat-val">${r.maxGap}"</div><div class="stat-lbl">Max gap to fill</div></div></div>
-    <div class="col-6 col-sm-3"><div class="stat-card">
-      <div class="stat-val">${r.nStacks}</div><div class="stat-lbl">Stacks per sled</div></div></div>
-    <div class="col-6 col-sm-3"><div class="stat-card">
-      <div class="stat-val">${r.nStacks*2}</div><div class="stat-lbl">Total stacks</div></div></div>
-    <div class="col-6 col-sm-3"><div class="stat-card">
-      <div class="stat-val">${totalUsed}</div><div class="stat-lbl">Pieces used</div></div></div>
-    <div class="col-12"><div class="stat-card" style="text-align:left;">
-      <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:.3rem;">Positions on Girder</div>
-      <div class="mono" style="font-size:.8rem;color:var(--steel);">
-        <strong>Sled 1:</strong> ${r.s1Start.toFixed(2)} – ${r.s1End.toFixed(2)} ft &nbsp;|&nbsp;
-        <strong>Sled 2:</strong> ${r.s2Start.toFixed(2)} – ${r.s2End.toFixed(2)} ft
-        <br><span style="color:var(--muted);font-size:.72rem;">${ovStr}</span>
+    <div class="row g-2">
+      <div class="col-6 col-sm-4 col-lg">
+        <div class="stat-card">
+          <div class="stat-val" style="font-size:1.6rem">${r.nStacks}</div>
+          <div class="stat-lbl">Stacks / sled</div>
+        </div>
       </div>
-    </div></div>`;
+      <div class="col-6 col-sm-4 col-lg">
+        <div class="stat-card">
+          <div class="stat-val" style="font-size:1.6rem">${r.nWeld}</div>
+          <div class="stat-lbl">Welded / sled</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg">
+        <div class="stat-card">
+          <div class="stat-val" style="font-size:1.6rem">${r.maxGap}"</div>
+          <div class="stat-lbl">Max gap</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg">
+        <div class="stat-card">
+          <div class="stat-val" style="font-size:1.6rem">${r.nStacks*2}</div>
+          <div class="stat-lbl">Total stacks</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg">
+        <div class="stat-card">
+          <div class="stat-val" style="font-size:1.6rem">${totalUsed}</div>
+          <div class="stat-lbl">Pieces used</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg-3">
+        <div class="stat-card" style="text-align:left;padding:.65rem .85rem;">
+          <div style="font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:.3rem;">Positions on Girder</div>
+          <div class="mono" style="font-size:.72rem;color:var(--steel);line-height:1.6;">
+            <b>S1:</b> ${r.s1Start.toFixed(1)} – ${r.s1End.toFixed(1)} ft<br>
+            <b>S2:</b> ${r.s2Start.toFixed(1)} – ${r.s2End.toFixed(1)} ft<br>
+            <span style="color:var(--muted);font-size:.65rem;">${ovStr}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderInvSummary(r){
@@ -880,8 +890,8 @@ function renderLayout(r){
 
 // ── Camber diagram ─────────────────────────────────────────────────────────
 function drawCamber(r){
-  const svg=document.getElementById('camberSvg');
-  const W=600, H=130, pad=32;
+  const svg=document.getElementById('camberSvgRow');
+  const W=800, H=140, pad=32;
   const gW=W-2*pad, gH=H-2*pad;
 
   const girderFt = r ? r.girderFt : V('girderLen')||100;
@@ -985,7 +995,10 @@ function drawCamber(r){
 
 function updateCamberDesc(){
   const type=document.getElementById('camberType').value;
-  document.getElementById('camberDesc').innerHTML=CAMBER_DESC[type];
+  const descHtml=CAMBER_DESC[type];
+  document.getElementById('camberDesc').innerHTML=descHtml;
+  const row=document.getElementById('camberDescRow');
+  if(row) row.innerHTML=descHtml;
   const showZones = (type==='hat'||type==='hatrev');
   document.getElementById('zoneInputs').style.display = showZones ? 'block' : 'none';
   if(showZones){
