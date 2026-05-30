@@ -309,6 +309,13 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
     </div>
     <!-- Layout tables full width -->
     <div id="layoutTables"></div>
+    <!-- Chain-down points -->
+    <div class="calc-card" id="chainDownCard" style="display:none;">
+      <div class="card-hdr" style="background:#15803d;">
+        <ph-link-bold></ph-link-bold> Recommended Chain-Down Points
+      </div>
+      <div class="card-body" id="chainDown"></div>
+    </div>
   </div>
 
 </div>
@@ -604,6 +611,7 @@ function calculate(){
   renderInvSummary(r);
   renderStackVisual(r);
   renderLayout(r);
+  renderChainDown(r);
   drawCamber(r);
   updateCamberDesc();
 }
@@ -1034,6 +1042,119 @@ function validateZones(){
       '<span style="opacity:.75">Taper length auto-calculated: ('+girder.toFixed(0)+
       ' − 2×'+outer.toFixed(0)+' − '+center.toFixed(0)+') ÷ 2 = '+taper.toFixed(1)+' ft each</span>';
   }
+}
+
+// ── Chain-down point calculator ──────────────────────────────────────────────
+function renderChainDown(r){
+  const card = document.getElementById('chainDownCard');
+  const el   = document.getElementById('chainDown');
+  if(r.nStacks === 0){
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+
+  // For each sled, find the stacked positions sorted by weldNum
+  // Chain-down logic: pick at minimum the 2 stacked positions that are
+  // furthest apart (outer-most and inner-most stacked welded angle).
+  // If 4 are requested, also pick 2nd from each end.
+  // Chain directly over a stack = downward force holds stack in place.
+
+  function getChainPoints(rows, sledFt){
+    // Target: ~10 ft from each end of sled.
+    // Find the nearest welded angle (any position) to each target.
+    // Best practice: hook chain around a fixed/welded angle.
+    const target1 = 10;                  // ft from outer end
+    const target2 = sledFt - 10;         // ft from outer end (near inner end)
+    const allPositions = rows.slice().sort((a,b)=>a.weldNum-b.weldNum);
+    if(allPositions.length === 0) return [];
+
+    function nearest(targetFt){
+      return allPositions.reduce((best, p)=>{
+        const dist = Math.abs(p.posInSled - targetFt);
+        const bestDist = Math.abs(best.posInSled - targetFt);
+        return dist < bestDist ? p : best;
+      }, allPositions[0]);
+    }
+
+    const chain1 = nearest(target1);
+    const chain2 = nearest(target2);
+    // If both resolve to same position (very short sled), return just one
+    if(chain1.weldNum === chain2.weldNum) return [chain1];
+    return [chain1, chain2];
+  }
+
+  const s1points = getChainPoints(r.rows1, r.sledFt);
+  const s2points = getChainPoints(r.rows2.slice().sort((a,b)=>a.weldNum-b.weldNum), r.sledFt);
+
+  function buildTable(points, sledLabel, sledColor){
+    if(points.length === 0) return `<p style="color:var(--muted);font-size:.85rem;">No stack positions — no chain-down points needed.</p>`;
+    const rows = points.map((p,i)=>`
+      <tr>
+        <td><span style="background:${sledColor};color:#fff;padding:2px 10px;border-radius:20px;font-family:var(--mono);font-size:.78rem;font-weight:700;">Chain ${i+1}</span></td>
+        <td class="mono" style="font-weight:700;">${p.label}</td>
+        <td class="mono">${(p.posInSled*12).toFixed(1)}"</td>
+        <td class="mono">${p.posOnGirder.toFixed(2)} ft</td>
+        <td class="mono">${p.gap.toFixed(3)}"</td>
+        <td><span class="combo-pill">${p.combo ? p.combo.desc : '—'}</span></td>
+        <td class="mono" style="font-weight:700;">${p.totalHt.toFixed(3)}"</td>
+      </tr>`).join('');
+    return `
+      <div style="font-size:.8rem;font-weight:700;color:${sledColor};margin-bottom:.4rem;font-family:var(--mono);">
+        ${sledLabel} — ${points.length} chain-down point${points.length>1?'s':''}
+      </div>
+      <div class="layout-wrap" style="margin-bottom:1rem;">
+        <table class="layout-tbl">
+          <thead><tr>
+            <th>Chain</th><th>Label</th><th>Pos on sled (in)</th>
+            <th>Pos on girder (ft)</th><th>Gap (in)</th>
+            <th>Stack combo</th><th>Stack height</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  const totalChains = s1points.length + s2points.length;
+  const span1 = s1points.length>=2
+    ? Math.abs(s1points[s1points.length-1].posOnGirder - s1points[0].posOnGirder).toFixed(1)+' ft apart'
+    : '—';
+  const span2 = s2points.length>=2
+    ? Math.abs(s2points[s2points.length-1].posOnGirder - s2points[0].posOnGirder).toFixed(1)+' ft apart'
+    : '—';
+
+  el.innerHTML = `
+    <div class="row g-3 mb-3">
+      <div class="col-auto">
+        <div class="stat-card" style="background:linear-gradient(135deg,#15803d,#14532d);border-color:#15803d;min-width:120px;">
+          <div class="stat-val" style="color:#fcd34d;font-size:1.6rem;">${totalChains}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,.7);">Total chains</div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="stat-card" style="min-width:140px;">
+          <div class="stat-val" style="font-size:1rem;">${s1points.length}</div>
+          <div class="stat-lbl">Sled 1 chains<br><span style="font-size:.65rem;color:var(--muted);">${span1}</span></div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="stat-card" style="min-width:140px;">
+          <div class="stat-val" style="font-size:1rem;">${s2points.length}</div>
+          <div class="stat-lbl">Sled 2 chains<br><span style="font-size:.65rem;color:var(--muted);">${span2}</span></div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div style="font-size:.78rem;color:var(--muted);background:var(--success-bg);border:1px solid #86efac;border-radius:6px;padding:.5rem .85rem;line-height:1.5;">
+          <ph-info-bold style="color:#15803d;"></ph-info-bold>
+          <strong style="color:#15803d;">Chain-down guidance:</strong>
+          Place chains directly over or adjacent to stacked angle positions so downward chain force
+          holds stacks firmly in place. Positioned ~10 ft from each end of sled. Hook chain around the nearest fixed welded angle.
+          Stack at that position if present — chain force also helps hold stack in place.
+        </div>
+      </div>
+    </div>
+    ${buildTable(s1points,'SLED 1','var(--steel)')}
+    ${buildTable(s2points,'SLED 2','var(--mid)')}`;
 }
 
 // ── Wire all inputs to auto-recalc ────────────────────────────────────────────
