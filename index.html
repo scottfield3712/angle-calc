@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bridge Girder Angle Stack Calculator</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='10' width='28' height='12' rx='3' fill='%23d97706'/%3E%3Crect x='4' y='10' width='2' height='8' rx='1' fill='%23fff'/%3E%3Crect x='8' y='10' width='2' height='5' rx='1' fill='%23fff'/%3E%3Crect x='12' y='10' width='2' height='8' rx='1' fill='%23fff'/%3E%3Crect x='16' y='10' width='2' height='5' rx='1' fill='%23fff'/%3E%3Crect x='20' y='10' width='2' height='8' rx='1' fill='%23fff'/%3E%3Crect x='24' y='10' width='2' height='5' rx='1' fill='%23fff'/%3E%3C/svg%3E">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 <!-- Phosphor Icons - free, MIT licensed -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/2.0.0/phosphor.min.js"></script>
@@ -11,12 +12,16 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 :root {
   --steel:#1a3a5c; --mid:#2563a8; --light:#c8def5; --pale:#e8f2fc;
+  --sled1:#1a3a5c; --sled1-light:#c8def5; --sled1-bg:#e8f2fc;
+  --sled2:#0f6b5c; --sled2-light:#99e6d8; --sled2-bg:#d1faf5;
+  --chain:#7c3aed; --chain-light:#ede9fe; --chain-bg:#f5f3ff;
   --accent:#d97706; --success:#15803d; --success-bg:#dcfce7;
   --warn:#b45309; --warn-bg:#fef3c7;
   --danger:#b91c1c; --danger-bg:#fee2e2;
   --gray-bg:#f4f6f9; --border:#d0dae8; --text:#1a2433; --muted:#5a6a80;
   --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
   --radius:10px; --shadow:0 2px 14px rgba(26,58,92,0.10);
+  --yin:#FFF2CC; --ybdr:#FFD966;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100vh;}
@@ -35,6 +40,9 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
 .input-label{font-size:0.85rem;font-weight:600;}
 .input-hint{font-size:0.72rem;color:var(--muted);font-style:italic;margin-top:1px;}
 .form-control,.form-select{font-family:var(--mono);font-size:0.92rem;font-weight:600;color:#1a4fa0;background:#f0f6ff;border:2px solid #b8d0f0;border-radius:6px;text-align:center;padding:0.35rem 0.5rem;transition:border-color .15s,box-shadow .15s;}
+/* Yellow highlight for user-editable inputs */
+input.form-control, input.inv-qty{background:var(--yin);border:2px solid var(--ybdr);color:#1a4fa0;font-weight:700;}
+input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(--mid);box-shadow:0 0 0 3px rgba(37,99,168,0.18);}
 .form-control:focus,.form-select:focus{border-color:var(--mid);box-shadow:0 0 0 3px rgba(37,99,168,0.18);background:#fff;outline:none;}
 .form-select{text-align:left;padding-left:0.5rem;}
 
@@ -311,8 +319,8 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
     <div id="layoutTables"></div>
     <!-- Chain-down points -->
     <div class="calc-card" id="chainDownCard" style="display:none;">
-      <div class="card-hdr" style="background:#15803d;">
-        <ph-link-bold></ph-link-bold> Recommended Chain-Down Points
+      <div class="card-hdr" style="background:var(--chain);">
+        <ph-link-chain-bold></ph-link-chain-bold> Recommended Chain-Down Points
       </div>
       <div class="card-body" id="chainDown"></div>
     </div>
@@ -628,116 +636,103 @@ function renderStackVisual(r){
   const s1 = r.rows1.slice().sort((a,b)=>a.weldNum-b.weldNum);
   const s2 = r.rows2.slice().sort((a,b)=>b.weldNum-a.weldNum);
 
-  const maxGapVal = Math.max(0.001, ...s1.map(x=>x.gap), ...s2.map(x=>x.gap));
-  const allStacks = [...s1,...s2].map(x=>x.combo?x.combo.total:0);
+  const maxGapVal   = Math.max(0.001, ...s1.map(x=>x.gap), ...s2.map(x=>x.gap));
+  const allStacks   = [...s1,...s2].map(x=>x.combo?x.combo.total:0);
   const maxStackVal = Math.max(0.001, ...allStacks);
-  const maxBarPx = 70;
+  const maxBarPx    = 70;
+  const containerH  = maxBarPx + 40;
 
-  // Build one sled's HTML — welded dots along a bar, stack bars only where placed
   function sledHtml(rows, label, sledClass){
-    // Container is a positioned div; welded dots placed proportionally along bottom
-    // Stack bars rise up from the dots that have stacks
-    const sledW = 100; // percentage width
-
-    let dotsHtml = '';
-    let barsHtml = '';
-    let labelsHtml = '';
+    let dotsHtml = '', barsHtml = '', labelsHtml = '';
 
     rows.forEach((row, idx) => {
       const pct = n>1 ? (idx/(n-1))*100 : 50;
       const hasStack = row.action==='stack';
       const dotColor = hasStack ? 'var(--accent)' : '#b0bec5';
-      const dotSize = hasStack ? 8 : 5;
+      const dotSize  = hasStack ? 8 : 5;
 
-      // Welded angle dot — always shown
-      dotsHtml += '<div style="position:absolute;bottom:0;left:'+pct.toFixed(1)+'%;'+
-        'transform:translateX(-50%);width:'+dotSize+'px;height:'+dotSize+'px;'+
-        'background:'+dotColor+';border-radius:1px;" '+
-        'title="Position '+row.weldNum+'"></div>';
+      dotsHtml += `<div style="position:absolute;bottom:0;left:${pct.toFixed(1)}%;`+
+        `transform:translateX(-50%);width:${dotSize}px;height:${dotSize}px;`+
+        `background:${dotColor};border-radius:1px;" title="Position ${row.weldNum}"></div>`;
 
-      // Position number — show only at endpoints and stacked positions to avoid overlap
       const showNum = hasStack || idx===0 || idx===n-1;
       if(showNum){
-        labelsHtml += '<div style="position:absolute;bottom:-16px;left:'+pct.toFixed(1)+'%;'+
-          'transform:translateX(-50%);font-family:var(--mono);font-size:.58rem;'+
-          'color:'+(hasStack?'var(--accent)':'var(--muted)')+';'+
-          'font-weight:'+(hasStack?'700':'400')+';white-space:nowrap;">'+
-          row.weldNum+'</div>';
+        labelsHtml += `<div style="position:absolute;bottom:-16px;left:${pct.toFixed(1)}%;`+
+          `transform:translateX(-50%);font-family:var(--mono);font-size:.58rem;`+
+          `color:${hasStack?'var(--accent)':'var(--muted)'};`+
+          `font-weight:${hasStack?'700':'400'};white-space:nowrap;">${row.weldNum}</div>`;
       }
 
-      // Stack bar + label — ONLY at stacked positions
       if(hasStack && row.combo){
-        const stackHt = row.combo ? row.combo.total : 0;
+        const stackHt = row.combo.total;
         const barH = stackHt>0 ? Math.max(8, Math.round((stackHt/maxStackVal)*maxBarPx)) : 0;
+        const ht   = stackHt.toFixed(2);
         const desc = row.combo.desc;
-        const ht = row.combo.total.toFixed(2);
-
-        barsHtml += '<div style="position:absolute;bottom:'+dotSize+'px;left:'+pct.toFixed(1)+'%;'+
-          'transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;">'+
-          '<div style="font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--steel);'+
-          'white-space:nowrap;margin-bottom:2px;">'+ht+'"</div>'+
-          '<div style="width:18px;height:'+barH+'px;'+
-          'background:linear-gradient(to top,#d97706,#fbbf24);'+
-          'border:1px solid #b45309;border-radius:3px 3px 0 0;'+
-          'position:relative;" title="'+desc+'">'+
-          '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'+
-          'font-size:.5rem;color:#fff;font-weight:700;">'+row.combo.pieces+'</div>'+
-          '</div>'+
-          '</div>';
+        barsHtml += `<div style="position:absolute;bottom:${dotSize}px;left:${pct.toFixed(1)}%;`+
+          `transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;">`+
+          `<div style="font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--steel);`+
+          `white-space:nowrap;margin-bottom:2px;">${ht}"</div>`+
+          `<div style="width:18px;height:${barH}px;`+
+          `background:linear-gradient(to top,#d97706,#fbbf24);`+
+          `border:1px solid #b45309;border-radius:3px 3px 0 0;position:relative;" title="${desc}">`+
+          `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);`+
+          `font-size:.5rem;color:#fff;font-weight:700;">${row.combo.pieces}</div>`+
+          `</div></div>`;
       }
     });
 
-    return '<div style="flex:1;min-width:120px;">'+
-      '<div style="font-size:.7rem;font-weight:700;color:var(--steel);margin-bottom:2px;'+
-      'font-family:var(--mono);text-align:center;">'+label+'</div>'+
-      '<div style="position:relative;height:'+(maxBarPx+40)+'px;margin-bottom:20px;">'+
+    return `<div style="flex:1;min-width:120px;">`+
+      `<div style="font-size:.7rem;font-weight:700;color:var(--steel);margin-bottom:2px;`+
+      `font-family:var(--mono);text-align:center;">${label}</div>`+
+      `<div style="position:relative;height:${containerH}px;margin-bottom:20px;">`+
         barsHtml+
-        '<div style="position:absolute;bottom:0;left:0;right:0;height:5px;'+
-        'background:'+sledClass+';border-radius:2px;"></div>'+
+        `<div style="position:absolute;bottom:0;left:0;right:0;height:5px;`+
+        `background:${sledClass};border-radius:2px;"></div>`+
         dotsHtml+
         labelsHtml+
-      '</div>'+
-    '</div>';
+      `</div>`+
+    `</div>`;
   }
 
-  // Center gap element
-  const gapHtml = '<div style="display:flex;flex-direction:column;align-items:center;'+
-    'justify-content:flex-end;min-width:24px;padding:0 2px;height:'+(maxBarPx+40)+'px;margin-bottom:20px;">'+
-    '<div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);'+
-    'writing-mode:vertical-rl;margin-bottom:4px;">GAP</div>'+
-    '<div style="flex:1;border-left:2px dashed #cbd5e1;min-height:20px;"></div>'+
-    '<div style="height:5px;width:100%;"></div>'+
-  '</div>';
+  const gapHtml =
+    `<div style="display:flex;flex-direction:column;align-items:center;`+
+    `justify-content:flex-end;min-width:24px;padding:0 2px;height:${containerH}px;margin-bottom:20px;">`+
+    `<div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);`+
+    `writing-mode:vertical-rl;margin-bottom:4px;">GAP</div>`+
+    `<div style="flex:1;border-left:2px dashed #cbd5e1;min-height:20px;"></div>`+
+    `<div style="height:5px;width:100%;"></div>`+
+    `</div>`;
 
-  // Outer-end labels
-  const outerLabels = '<div style="display:flex;justify-content:space-between;'+
-    'padding:0 2px;margin-top:4px;">'+
-    '<span style="font-size:.65rem;color:var(--muted);font-weight:600;">◄ Outer</span>'+
-    '<span style="font-size:.65rem;color:var(--muted);font-weight:600;">Outer ►</span>'+
-  '</div>';
+  const outerLabels =
+    `<div style="display:flex;justify-content:space-between;padding:0 2px;margin-top:4px;">`+
+    `<span style="font-size:.65rem;color:var(--muted);font-weight:600;">◄ Outer</span>`+
+    `<span style="font-size:.65rem;color:var(--muted);font-weight:600;">Outer ►</span>`+
+    `</div>`;
 
   el.innerHTML =
-    '<div style="overflow-x:auto;padding:.25rem 0;">'+
-      '<div style="display:flex;align-items:flex-end;gap:0;min-width:320px;">'+
-        sledHtml(s1, 'SLED 1', 'var(--steel)')+
+    `<div style="overflow-x:auto;padding:.25rem 0;">`+
+      `<div style="display:flex;align-items:flex-end;gap:0;min-width:320px;">`+
+        sledHtml(s1, 'SLED 1', 'var(--sled1)')+
         gapHtml+
-        sledHtml(s2, 'SLED 2', 'var(--mid)')+
-      '</div>'+
+        sledHtml(s2, 'SLED 2', 'var(--sled2)')+
+      `</div>`+
       outerLabels+
-    '</div>'+
-    '<div class="vis-legend">'+
-      '<span style="display:inline-block;width:12px;height:12px;background:linear-gradient(#fbbf24,#d97706);'+
-      'border:1px solid #b45309;border-radius:2px;vertical-align:middle;margin-right:3px;"></span> '+
-      'Stack placed (height labeled, piece count inside bar, hover for combo) &nbsp;·&nbsp; '+
-      '<span style="display:inline-block;width:8px;height:8px;background:var(--accent);'+
-      'border-radius:1px;vertical-align:middle;margin:0 3px;"></span> '+
-      'Welded angle with stack &nbsp;·&nbsp; '+
-      '<span style="display:inline-block;width:5px;height:5px;background:#b0bec5;'+
-      'border-radius:1px;vertical-align:middle;margin:0 3px;"></span> '+
-      'Welded angle only &nbsp;·&nbsp; '+
-      'Numbered 1 at outer ends, inward to center'+
-    '</div>';
+    `</div>`+
+    `<div class="vis-legend">`+
+      `<span style="display:inline-block;width:12px;height:12px;background:linear-gradient(#fbbf24,#d97706);`+
+      `border:1px solid #b45309;border-radius:2px;vertical-align:middle;margin-right:3px;"></span> `+
+      `Stack placed (height labeled, piece count inside bar, hover for combo) &nbsp;·&nbsp; `+
+      `<span style="display:inline-block;width:8px;height:8px;background:var(--accent);`+
+      `border-radius:1px;vertical-align:middle;margin:0 3px;"></span> `+
+      `Welded angle with stack &nbsp;·&nbsp; `+
+      `<span style="display:inline-block;width:5px;height:5px;background:#b0bec5;`+
+      `border-radius:1px;vertical-align:middle;margin:0 3px;"></span> `+
+      `Welded angle only &nbsp;·&nbsp; `+
+      `Numbered 1 at outer ends, inward to center`+
+    `</div>`;
 }
+
+
 
 
 function renderHero(r){
@@ -792,8 +787,8 @@ function renderStats(r){
         <div class="stat-card" style="text-align:left;padding:.65rem .85rem;">
           <div style="font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:.3rem;">Positions on Girder</div>
           <div class="mono" style="font-size:.72rem;color:var(--steel);line-height:1.6;">
-            <b>S1:</b> ${r.s1Start.toFixed(1)} – ${r.s1End.toFixed(1)} ft<br>
-            <b>S2:</b> ${r.s2Start.toFixed(1)} – ${r.s2End.toFixed(1)} ft<br>
+            <b style="color:var(--sled1);">S1:</b> ${r.s1Start.toFixed(1)} – ${r.s1End.toFixed(1)} ft<br>
+            <b style="color:var(--sled2);">S2:</b> ${r.s2Start.toFixed(1)} – ${r.s2End.toFixed(1)} ft<br>
             <span style="color:var(--muted);font-size:.65rem;">${ovStr}</span>
           </div>
         </div>
@@ -1048,114 +1043,98 @@ function validateZones(){
 function renderChainDown(r){
   const card = document.getElementById('chainDownCard');
   const el   = document.getElementById('chainDown');
-  if(r.nStacks === 0){
-    card.style.display = 'none';
-    return;
-  }
+  if(r.nStacks === 0){ card.style.display='none'; return; }
   card.style.display = 'block';
 
-  // For each sled, find the stacked positions sorted by weldNum
-  // Chain-down logic: pick at minimum the 2 stacked positions that are
-  // furthest apart (outer-most and inner-most stacked welded angle).
-  // If 4 are requested, also pick 2nd from each end.
-  // Chain directly over a stack = downward force holds stack in place.
-
   function getChainPoints(rows, sledFt){
-    // Target: ~10 ft from each end of sled.
-    // Find the nearest welded angle (any position) to each target.
-    // Best practice: hook chain around a fixed/welded angle.
-    const target1 = 10;                  // ft from outer end
-    const target2 = sledFt - 10;         // ft from outer end (near inner end)
-    const allPositions = rows.slice().sort((a,b)=>a.weldNum-b.weldNum);
-    if(allPositions.length === 0) return [];
-
-    function nearest(targetFt){
-      return allPositions.reduce((best, p)=>{
-        const dist = Math.abs(p.posInSled - targetFt);
-        const bestDist = Math.abs(best.posInSled - targetFt);
-        return dist < bestDist ? p : best;
-      }, allPositions[0]);
-    }
-
-    const chain1 = nearest(target1);
-    const chain2 = nearest(target2);
-    // If both resolve to same position (very short sled), return just one
-    if(chain1.weldNum === chain2.weldNum) return [chain1];
-    return [chain1, chain2];
+    const target1 = 10, target2 = sledFt - 10;
+    const all = rows.slice().sort((a,b)=>a.weldNum-b.weldNum);
+    if(!all.length) return [];
+    const nearest = t => all.reduce((b,p)=>
+      Math.abs(p.posInSled-t)<Math.abs(b.posInSled-t)?p:b, all[0]);
+    const c1=nearest(target1), c2=nearest(target2);
+    return c1.weldNum===c2.weldNum ? [c1] : [c1,c2];
   }
 
-  const s1points = getChainPoints(r.rows1, r.sledFt);
-  const s2points = getChainPoints(r.rows2.slice().sort((a,b)=>a.weldNum-b.weldNum), r.sledFt);
+  const s1pts = getChainPoints(r.rows1, r.sledFt);
+  const s2pts = getChainPoints(r.rows2.slice().sort((a,b)=>a.weldNum-b.weldNum), r.sledFt);
+  const total = s1pts.length + s2pts.length;
 
-  function buildTable(points, sledLabel, sledColor){
-    if(points.length === 0) return `<p style="color:var(--muted);font-size:.85rem;">No stack positions — no chain-down points needed.</p>`;
-    const rows = points.map((p,i)=>`
+  function span(pts){
+    if(pts.length<2) return '—';
+    return Math.abs(pts[pts.length-1].posOnGirder - pts[0].posOnGirder).toFixed(1)+' ft span';
+  }
+
+  function chainTable(pts, sledLabel, accentColor, bgColor){
+    if(!pts.length) return '';
+    const rows = pts.map((p,i)=>`
       <tr>
-        <td><span style="background:${sledColor};color:#fff;padding:2px 10px;border-radius:20px;font-family:var(--mono);font-size:.78rem;font-weight:700;">Chain ${i+1}</span></td>
-        <td class="mono" style="font-weight:700;">${p.label}</td>
+        <td>
+          <span style="background:${accentColor};color:#fff;padding:2px 10px;
+            border-radius:20px;font-family:var(--mono);font-size:.78rem;font-weight:700;
+            display:inline-flex;align-items:center;gap:4px;">
+            <ph-link-chain-bold></ph-link-chain-bold> Chain ${i+1}
+          </span>
+        </td>
+        <td class="mono" style="font-weight:700;color:${accentColor};">${p.label}</td>
         <td class="mono">${(p.posInSled*12).toFixed(1)}"</td>
         <td class="mono">${p.posOnGirder.toFixed(2)} ft</td>
-        <td class="mono">${p.gap.toFixed(3)}"</td>
-        <td><span class="combo-pill">${p.combo ? p.combo.desc : '—'}</span></td>
-        <td class="mono" style="font-weight:700;">${p.totalHt.toFixed(3)}"</td>
+
       </tr>`).join('');
+
     return `
-      <div style="font-size:.8rem;font-weight:700;color:${sledColor};margin-bottom:.4rem;font-family:var(--mono);">
-        ${sledLabel} — ${points.length} chain-down point${points.length>1?'s':''}
+      <div style="font-size:.78rem;font-weight:700;color:${accentColor};
+        margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem;">
+        <ph-link-chain-bold></ph-link-chain-bold> ${sledLabel}
+        <span style="font-weight:400;color:var(--muted);">${span(pts)}</span>
       </div>
       <div class="layout-wrap" style="margin-bottom:1rem;">
         <table class="layout-tbl">
           <thead><tr>
-            <th>Chain</th><th>Label</th><th>Pos on sled (in)</th>
-            <th>Pos on girder (ft)</th><th>Gap (in)</th>
-            <th>Stack combo</th><th>Stack height</th>
+            <th>Chain</th><th>Welded Position</th>
+            <th>Pos on sled (in)</th><th>Pos on girder (ft)</th>
           </tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>`;
   }
 
-  const totalChains = s1points.length + s2points.length;
-  const span1 = s1points.length>=2
-    ? Math.abs(s1points[s1points.length-1].posOnGirder - s1points[0].posOnGirder).toFixed(1)+' ft apart'
-    : '—';
-  const span2 = s2points.length>=2
-    ? Math.abs(s2points[s2points.length-1].posOnGirder - s2points[0].posOnGirder).toFixed(1)+' ft apart'
-    : '—';
-
   el.innerHTML = `
-    <div class="row g-3 mb-3">
-      <div class="col-auto">
-        <div class="stat-card" style="background:linear-gradient(135deg,#15803d,#14532d);border-color:#15803d;min-width:120px;">
-          <div class="stat-val" style="color:#fcd34d;font-size:1.6rem;">${totalChains}</div>
-          <div class="stat-lbl" style="color:rgba(255,255,255,.7);">Total chains</div>
+    <div class="row g-2 mb-3">
+      <div class="col-4">
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--chain),#5b21b6);
+          border-color:var(--chain);text-align:center;">
+          <div class="stat-val" style="color:#fcd34d;font-size:1.5rem;">${total}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,.75);">Total chains</div>
         </div>
       </div>
-      <div class="col-auto">
-        <div class="stat-card" style="min-width:140px;">
-          <div class="stat-val" style="font-size:1rem;">${s1points.length}</div>
-          <div class="stat-lbl">Sled 1 chains<br><span style="font-size:.65rem;color:var(--muted);">${span1}</span></div>
+      <div class="col-4">
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--sled1),#0f2540);
+          border-color:var(--sled1);text-align:center;">
+          <div class="stat-val" style="color:#fcd34d;font-size:1.5rem;">${s1pts.length}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,.75);">Sled 1</div>
         </div>
       </div>
-      <div class="col-auto">
-        <div class="stat-card" style="min-width:140px;">
-          <div class="stat-val" style="font-size:1rem;">${s2points.length}</div>
-          <div class="stat-lbl">Sled 2 chains<br><span style="font-size:.65rem;color:var(--muted);">${span2}</span></div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div style="font-size:.78rem;color:var(--muted);background:var(--success-bg);border:1px solid #86efac;border-radius:6px;padding:.5rem .85rem;line-height:1.5;">
-          <ph-info-bold style="color:#15803d;"></ph-info-bold>
-          <strong style="color:#15803d;">Chain-down guidance:</strong>
-          Place chains directly over or adjacent to stacked angle positions so downward chain force
-          holds stacks firmly in place. Positioned ~10 ft from each end of sled. Hook chain around the nearest fixed welded angle.
-          Stack at that position if present — chain force also helps hold stack in place.
+      <div class="col-4">
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--sled2),#064e3b);
+          border-color:var(--sled2);text-align:center;">
+          <div class="stat-val" style="color:#fcd34d;font-size:1.5rem;">${s2pts.length}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,.75);">Sled 2</div>
         </div>
       </div>
     </div>
-    ${buildTable(s1points,'SLED 1','var(--steel)')}
-    ${buildTable(s2points,'SLED 2','var(--mid)')}`;
+    <div style="font-size:.78rem;color:var(--muted);background:var(--chain-bg);
+      border:1px solid var(--chain-light);border-radius:6px;padding:.5rem .85rem;
+      margin-bottom:1rem;line-height:1.5;">
+      <ph-info-bold style="color:var(--chain);"></ph-info-bold>
+      <strong style="color:var(--chain);">Chain-down guidance:</strong>
+      Positioned ~10 ft from each end of sled. Hook chain around the nearest fixed welded angle.
+      Chain force also holds any stack at that position firmly in place.
+    </div>
+    ${chainTable(s1pts,'SLED 1','var(--sled1)','var(--sled1-bg)')}
+    ${chainTable(s2pts,'SLED 2','var(--sled2)','var(--sled2-bg)')}`;
 }
+
 
 // ── Wire all inputs to auto-recalc ────────────────────────────────────────────
 const allInputs=[
