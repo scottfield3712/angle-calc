@@ -5,37 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAhElEQVR42mNkwAKkrGL+M9AAPDu2hBFdjJEeFuNzCBO9LUe3i4nelqM7golhgAHjQPgeGQx4CAy4A1iwCa5bNIUmlgXF5YxGwagDqFcOoCdUbAlsNApGHTB0c8FoUTzqgNEm2chyALbuEr3As2NLGAdHFAxEKMDsZMLXc6VH55RxoLvnAEA3MJqugxJLAAAAAElFTkSuQmCC">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAACq0lEQVR42u3d0U0rQRBE0Z0RURAKYfCNiIBwiAD5mzAcitOACBDY2Dvd5XMSwGLvKxr0LI+tgMenl6+N9k7Hw1j9GoaASQp8iJikuIeISYp7CJmksKeYSfpjwBAySWs9xUzSWg8hk7TWU8wkrfUUM0lRTzGTFPUUM0lRTzGTFPUUM0lRTzGTFPX0bSLJtM4krfQUM0lROznIPzmsM11XeoqZpKidHOSeHNaZ7ittocn/pRDaB+3cIOHssNA4OaB00M4NUs4OC42TAwQNOxjuZyw0CBoEDYJG0CBoEDQIGgSNoEHQIGgQNAgaQYOgYb2HCi/i8+Pdkwjx/Pq29OsvfceKkIXt5ICKQVvnbKuer4XGQoOgQdAgaAQNggZBg6BB0AgaBA2CBkFD2aBXv7OBzOdroYlS4kOD/Gd/yxwVdGe3+MfoHHNygKARNAgaBA2CRtAgaBA0CBoEjaBB0CBoEDQIGkGDoEHQIGgQNIIGQYOgQdAgaAQNggZBg6BB0AgaBA2CBkGDoBE0CBr25HMKuaq7/pxCIQvbyQEVg7bO2VY9XwuNhQZBg6BB0AgaBA2CBkGDoBE0CBoEDYKGskGvfmcDmc/XQhPFewqJ+slbImhwcoCgETQIGgQNggZBI2gQNAgaBA2CRtAgaBA0XBL06XgYvg0kOB0Pw0Lj5ABBw15Bu6NJuJ8tNE4OaBG0s4Pu54aFxskBbYJ2dtD53LDQ5J8cVpqu6/zjQouajjE7Ocg/Oaw0Xdf514UWNZ1idnJwPyeHlabbOv95oUVNh5jPOjlETfWYz76hRU3lmC/6pVDUVI35oqBFTdWYLw5a1FSMedu27SpR+vBOVof874W21lSL+WoLba2pMoaz+gtEzEsX2lqzcvR2W1Nxi3iPr7PkPBC3iKOCFriAb+UbE1focPOXAZEAAAAASUVORK5CYII=">
-<meta name="theme-color" content="#1a3a5c">
+<meta name="theme-color" content="#2e2e2a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Girder Calc">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Bridge Girder Angle Stack Calculator</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <!-- Icons: inline SVG (works offline/local file) -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 :root {
-  --steel:#1a3a5c; --mid:#2563a8; --light:#c8def5; --pale:#e8f2fc;
-  --sled1:#1a3a5c; --sled1-light:#c8def5; --sled1-bg:#e8f2fc;
-  --sled2:#0f6b5c; --sled2-light:#99e6d8; --sled2-bg:#d1faf5;
-  --chain:#2d4a6b; --chain-light:#c5d8ef; --chain-bg:#eaf1f8;
-  --accent:#d97706; --success:#15803d; --success-bg:#dcfce7;
-  --warn:#b45309; --warn-bg:#fef3c7;
-  --danger:#b91c1c; --danger-bg:#fee2e2;
-  --gray-bg:#f4f6f9; --border:#d0dae8; --text:#1a2433; --muted:#5a6a80;
-  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
-  --radius:10px; --shadow:0 2px 14px rgba(26,58,92,0.10);
-  --yin:#FFF2CC; --ybdr:#FFD966;
+  /* PMS Warm Gray palette */
+  --wg11:   #2e2e2a;   /* Warm Gray 11 — darkest, headers */
+  --wg9:    #5c5b54;   /* Warm Gray 9 — secondary */
+  --wg7:    #7a7870;   /* Warm Gray 7 — sled 2, mid */
+  --wg4:    #ccc9c2;   /* Warm Gray 4 — borders, dividers */
+  --wg2:    #e5e3de;   /* Warm Gray 2 — subtle borders */
+  --wg1:    #f4f3f0;   /* Warm Gray 1 — page background */
+
+  /* Call to action — vibrant orange */
+  --cta:       #c6623f;
+  --cta-dark:  #a84e30;
+  --cta-light: #f7ede8;
+  --cta-shadow: rgba(198,98,63,0.32);
+
+  /* Sled colors — warm gray family, distinct */
+  --sled1:       #2e2e2a;   /* very dark warm gray */
+  --sled1-light: #c8c5be;
+  --sled1-bg:    #f2f1ef;
+  --sled2:       #7a7870;   /* Warm Gray 7 */
+  --sled2-light: #d6d3ce;
+  --sled2-bg:    #f5f4f2;
+
+  /* Chain-down */
+  --chain:       #54534a;
+  --chain-light: #c8c5be;
+  --chain-bg:    #f5f4f2;
+
+  /* Legacy aliases — keep so all var() refs resolve */
+  --steel:   #2e2e2a;
+  --mid:     #5c5b54;
+  --light:   #c8c5be;
+  --pale:    #f2f1ef;
+  --accent:  #c6623f;   /* warm amber for result numbers */
+  --border:  #e0dedd;
+  --text:    #1a1a16;
+  --muted:   #7a7870;
+  --gray-bg: #f4f3f0;
+  --yin:     #fff8ed;
+  --ybdr:    #c8c5be;
+
+  /* Status */
+  --success:#15803d; --success-bg:#dcfce7;
+  --warn:   #92400e; --warn-bg:  #fef3c7;
+  --danger: #991b1b; --danger-bg:#fee2e2;
+
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --radius:10px;
+  --shadow:0 2px 16px rgba(84,83,74,0.10);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100vh;}
+body{font-family:var(--sans);background:var(--wg1);color:var(--text);min-height:100vh;padding-top:.5rem;padding-bottom:2rem;}
 
 
 /* Cards */
-.calc-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:1.1rem;overflow:hidden;}
-.card-hdr{background:var(--steel);color:#fff;padding:0.6rem 1rem;font-weight:700;font-size:0.78rem;letter-spacing:0.07em;text-transform:uppercase;display:flex;align-items:center;gap:0.6rem;}
-.card-hdr.mid{background:var(--mid);}
-.step-num{background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;}
+.calc-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:1.1rem;overflow:visible;}
+.card-hdr{background:var(--wg11);color:#fff;padding:0.6rem 1rem;font-weight:700;font-size:0.78rem;letter-spacing:0.07em;text-transform:uppercase;display:flex;align-items:center;justify-content:flex-start;gap:0.6rem;overflow:visible;position:relative;}
+.card-hdr i{font-size:1.1rem;}
+.card-hdr.step-hdr{padding-top:1.6rem;justify-content:center;text-align:center;}
+
+.step-num{
+  background:var(--cta);
+  color:#fff;
+  width:36px;height:36px;
+  border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:0.9rem;font-weight:800;flex-shrink:0;
+  border:2px solid var(--wg1);
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:2;
+  box-shadow:0 2px 8px rgba(0,0,0,0.18);
+}
 .card-body{padding:1rem 1.1rem;}
 
 /* Input rows */
@@ -43,11 +98,11 @@ body{font-family:var(--sans);background:#edf2f8;color:var(--text);min-height:100
 .input-row:last-child{border-bottom:none;}
 .input-label{font-size:0.85rem;font-weight:600;}
 .input-hint{font-size:0.72rem;color:var(--muted);font-style:italic;margin-top:1px;}
-.form-control,.form-select{font-family:var(--mono);font-size:0.92rem;font-weight:600;color:#1a4fa0;background:#f0f6ff;border:2px solid #b8d0f0;border-radius:6px;text-align:center;padding:0.35rem 0.5rem;transition:border-color .15s,box-shadow .15s;}
+.form-control,.form-select{font-family:var(--mono);font-size:0.92rem;font-weight:600;color:var(--wg11);background:var(--wg1);border:2px solid var(--wg4);border-radius:6px;text-align:center;padding:0.35rem 0.5rem;transition:border-color .15s,box-shadow .15s;}
 /* Yellow highlight for user-editable inputs */
-input.form-control, input.inv-qty{background:var(--yin);border:2px solid var(--ybdr);color:#1a4fa0;font-weight:700;}
-input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(--mid);box-shadow:0 0 0 3px rgba(37,99,168,0.18);}
-.form-control:focus,.form-select:focus{border-color:var(--mid);box-shadow:0 0 0 3px rgba(37,99,168,0.18);background:#fff;outline:none;}
+input.form-control, input.inv-qty{background:var(--yin);border:2px solid var(--wg4);color:var(--wg11);font-weight:700;}
+input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(--cta);box-shadow:0 0 0 3px rgba(249,115,22,0.2);}
+.form-control:focus,.form-select:focus{border-color:var(--cta);box-shadow:0 0 0 3px rgba(249,115,22,0.2);background:#fff;outline:none;}
 .form-select{text-align:left;padding-left:0.5rem;}
 
 /* Inventory */
@@ -55,37 +110,40 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
 .inv-table th{background:var(--gray-bg);font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:.45rem .6rem;border-bottom:2px solid var(--border);text-align:center;}
 .inv-table td{padding:.5rem .6rem;border-bottom:1px solid #f0f4f8;text-align:center;font-size:.88rem;}
 .inv-table tr:last-child td{border-bottom:none;}
-.thk-lbl{font-family:var(--mono);font-weight:700;color:var(--steel);font-size:1rem;}
-.adds-lbl{font-family:var(--mono);font-size:.8rem;color:var(--mid);background:var(--pale);padding:2px 7px;border-radius:4px;display:inline-block;}
+.thk-lbl{font-family:var(--mono);font-weight:700;color:var(--wg11);font-size:1rem;}
+.adds-lbl{font-family:var(--mono);font-size:.8rem;color:var(--wg9);background:var(--wg1);padding:2px 7px;border-radius:4px;display:inline-block;}
 .inv-qty{width:72px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;color:#1a4fa0;}
 
 /* Calculate button */
-.btn-calc{background:linear-gradient(135deg,var(--accent) 0%,#b45309 100%);color:#fff;border:none;padding:.8rem 2rem;font-size:.95rem;font-weight:700;border-radius:8px;letter-spacing:.03em;box-shadow:0 4px 16px rgba(217,119,6,.3);transition:transform .1s,box-shadow .1s;width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;}
-.btn-calc:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(217,119,6,.4);color:#fff;}
+.btn-calc{background:linear-gradient(135deg,var(--cta) 0%,var(--cta-dark) 100%);color:#fff;border:none;padding:.8rem 2rem;font-size:.95rem;font-weight:700;border-radius:8px;letter-spacing:.03em;box-shadow:0 4px 16px var(--cta-shadow);transition:transform .1s,box-shadow .1s;width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.btn-calc:hover{transform:translateY(-1px);box-shadow:0 6px 24px var(--cta-shadow);color:#fff;}
 .btn-calc:active{transform:translateY(0);}
 
 /* Results */
 .results-section{display:none;}
 .results-section.visible{display:block;}
-.result-hero{background:linear-gradient(135deg,var(--steel) 0%,#0f2540 100%);color:#fff;border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:.75rem;}
-.result-hero .big-num{font-family:var(--mono);font-size:clamp(2rem,7vw,3.5rem);font-weight:700;line-height:1;color:#fcd34d;}
+.result-hero{background:linear-gradient(135deg,var(--wg11) 0%,#2a2920 100%);color:#fff;border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:.75rem;}
+.result-hero .big-num{font-family:var(--mono);font-size:clamp(2rem,7vw,3.5rem);font-weight:700;line-height:1;color:#f0a882;}
 .result-hero .big-lbl{font-size:.78rem;opacity:.75;margin-top:.3rem;text-transform:uppercase;letter-spacing:.08em;}
 .stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;text-align:center;height:100%;}
-.stat-val{font-family:var(--mono);font-size:1.25rem;font-weight:700;color:var(--mid);}
+.stat-val{font-family:var(--mono);font-size:1.25rem;font-weight:700;color:var(--wg11);}
 .stat-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}
 
 /* Layout table */
-.sled-hdr{background:var(--steel);color:#fff;padding:.55rem 1rem;font-weight:700;font-size:.82rem;letter-spacing:.04em;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
-.sled-hdr.s2{background:var(--mid);}
+.sled-hdr{background:var(--wg11);color:#fff;padding:.55rem 1rem;font-weight:700;font-size:.82rem;letter-spacing:.04em;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.sled-hdr.s2{background:var(--wg7);}
 .layout-wrap{overflow-x:auto;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);margin-bottom:1.25rem;}
 .layout-tbl{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap;min-width:700px;}
 .layout-tbl thead th{background:var(--gray-bg);padding:.5rem .65rem;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center;border-bottom:2px solid var(--border);}
 .layout-tbl tbody td{padding:.5rem .65rem;border-bottom:1px solid #f0f4f8;text-align:center;vertical-align:middle;}
-.layout-tbl tbody tr:hover{background:#f8fbff;}
-.row-stack td{background:#fffbeb;}
+.layout-tbl tbody tr{cursor:default;}
+.layout-tbl tbody tr:hover{background:#eeece8;transition:background .15s;}
+.layout-tbl tbody tr.row-stack:hover td{background:#f0e8e7;}
+.layout-tbl tbody tr.row-ok:hover td{background:#e8f0e8;}
+.row-stack td{background:#fff8f0;}
 .row-ok td{background:#f0fdf4;}
 .row-skip td{background:#fafafa;color:#aaa;}
-.badge-stack{background:var(--warn-bg);color:var(--warn);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.badge-stack{background:var(--cta-light);color:var(--cta-dark);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
 .badge-ok{background:var(--success-bg);color:var(--success);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;}
 .badge-skip{background:#f0f0f0;color:#999;font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:20px;}
 .badge-short{background:var(--danger-bg);color:var(--danger);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;}
@@ -97,12 +155,12 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
 .inv-sum-row:last-child{border-bottom:none;font-weight:700;padding-top:.5rem;}
 .bar-wrap{flex:1;margin:0 .75rem;max-width:160px;}
 .bar-bg{height:6px;background:#dde8f5;border-radius:3px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;transition:width .4s;background:var(--mid);}
-.bar-fill.warn{background:var(--accent);}
+.bar-fill{height:100%;border-radius:3px;transition:width .4s;background:var(--wg9);}
+.bar-fill.warn{background:var(--cta);}
 .bar-fill.danger{background:#dc2626;}
 
 /* Camber diagram */
-.camber-wrap{background:var(--gray-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;}
+.camber-wrap{background:var(--wg1);border:1px solid var(--wg2);border-radius:var(--radius);padding:.75rem;}
 #camberSvg{width:100%;height:auto;display:block;}
 
 /* No-stack alert */
@@ -134,25 +192,25 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
 
 
 
-<main class="container-fluid px-3 py-3" style="max-width:1600px;margin:0 auto;">
+<main class="container-fluid px-3 py-5" style="max-width:1600px;margin:0 auto;">
 <!-- ── ROW 1: Three input columns across top ── -->
 <div class="row g-3 mb-3">
 
   <!-- Column 1: Girder -->
   <div class="col-12 col-md-4 d-flex flex-column">
     <div class="calc-card flex-fill">
-      <div class="card-hdr">
+      <div class="card-hdr step-hdr">
         <span class="step-num">1</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M237.66,98.34l-32-32a8,8,0,0,0-11.32,11.32L212.69,96H183.57A16,16,0,0,0,168,107.43L139.57,164H116.43A16,16,0,0,0,100,152H44a16,16,0,0,0,0,32h56a16,16,0,0,0,15.57-12h23.14A16,16,0,0,0,154,160.57L182.43,104H216l-18.34,18.34a8,8,0,0,0,11.32,11.32l32-32A8,8,0,0,0,237.66,98.34Z"/></svg> Girder
+        Girder
       </div>
       <div class="card-body">
         <div class="input-row">
           <div><div class="input-label">Girder length (ft)</div><div class="input-hint">Total length — centered on both sleds</div></div>
-          <input type="number" class="form-control" id="girderLen" value="100" min="10" max="600" step="1">
+          <input type="number" class="form-control" id="girderLen" value="120" min="10" max="600" step="1">
         </div>
         <div class="input-row">
-          <div><div class="input-label">Max gap to fill (in)</div><div class="input-hint">Measured from top of welded angle to flange — at worst point</div></div>
-          <input type="number" class="form-control" id="maxGap" value="5.0" min="0.1" max="24" step="0.125">
+          <div><div class="input-label">Max gap to fill (in)</div><div class="input-hint">Measured from top of welded angle to flange — at highest camber point</div></div>
+          <input type="number" class="form-control" id="maxGap" value="2.5" min="0.1" max="24" step="0.125">
         </div>
         <div class="input-row">
           <div><div class="input-label">Camber type</div><div class="input-hint">Affects gap profile along girder</div></div>
@@ -182,22 +240,22 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
   <!-- Column 2: Sleds -->
   <div class="col-12 col-md-4 d-flex flex-column">
     <div class="calc-card flex-fill">
-      <div class="card-hdr">
+      <div class="card-hdr step-hdr">
         <span class="step-num">2</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232.49,212.85l-96,16a8.08,8.08,0,0,1-2.64,0l-96-16A8,8,0,0,1,32,205.14a8,8,0,0,1,9.51-6.63L128,213.17l86.49-14.66A8,8,0,0,1,217.49,212.85ZM128,181.17l86.49-14.66a8,8,0,1,0-2.64-15.78l-83.85,14.22-83.85-14.22a8,8,0,1,0-2.64,15.78ZM24,112a8,8,0,0,0,6.49,7.85l96,16a8.08,8.08,0,0,0,2.64,0l96-16A8,8,0,0,0,232,112L128,68Z"/></svg> Sleds
+        Sleds
       </div>
       <div class="card-body">
         <div class="input-row">
           <div><div class="input-label">Sled length (ft)</div><div class="input-hint">Both sleds always the same length</div></div>
-          <input type="number" class="form-control" id="sledLen" value="50" min="5" max="300" step="1">
+          <input type="number" class="form-control" id="sledLen" value="55" min="5" max="300" step="1">
         </div>
         <div class="input-row">
           <div><div class="input-label">Gap between sleds (ft)</div><div class="input-hint">Inner edge to inner edge (~2 ft)</div></div>
-          <input type="number" class="form-control" id="sledGap" value="2" min="0" max="20" step="0.5">
+          <input type="number" class="form-control" id="sledGap" value="3" min="0" max="20" step="0.5">
         </div>
         <div class="input-row">
           <div><div class="input-label">Welded angles per sled</div><div class="input-hint">Count of fixed welded angles on each sled</div></div>
-          <input type="number" class="form-control" id="weldCount" value="10" min="2" max="30" step="1">
+          <input type="number" class="form-control" id="weldCount" value="16" min="2" max="30" step="1">
         </div>
         <div class="input-row">
           <div><div class="input-label">Skip between stacks</div><div class="input-hint">Welded angles to skip between stacks (2-3 typical)</div></div>
@@ -210,9 +268,9 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
   <!-- Column 3: Inventory + Calculate -->
   <div class="col-12 col-md-4 d-flex flex-column">
     <div class="calc-card flex-fill">
-      <div class="card-hdr">
+      <div class="card-hdr step-hdr">
         <span class="step-num">3</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.53,44L176,93.44,95.53,49.52ZM128,120,47.47,76,80,57.56l80.53,43.92ZM40,90l80,43.64V224L40,180.36ZM136,224V133.64l40-21.82V152a8,8,0,0,0,16,0V103l24-13.07V180.36Z"/></svg> Stackable Angle Inventory
+        Stackable Angle Inventory
       </div>
       <div class="card-body">
         <p style="font-size:.78rem;color:var(--muted);margin-bottom:.7rem;">
@@ -260,8 +318,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
 <div class="row g-3 mb-3">
   <div class="col-12 col-lg-8">
     <div class="calc-card h-100">
-      <div class="card-hdr">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V128a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8V200H112V96a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h32V64a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z"/></svg> Camber Profile — Gap Along Girder Length
+      <div class="card-hdr"><i class="bi bi-graph-up me-1"></i> Camber Profile
       </div>
       <div class="card-body">
         <div id="camberDescRow" style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem;padding:.45rem .6rem;background:var(--gray-bg);border-radius:6px;line-height:1.5;"></div>
@@ -272,7 +329,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     </div>
   </div>
   <div class="col-12 col-lg-4 d-flex flex-column" style="min-height:0;">
-    <div class="calc-card flex-fill d-flex flex-column" style="background:var(--pale);border-color:var(--light);">
+    <div class="calc-card flex-fill d-flex flex-column" style="background:var(--wg1);border-color:var(--wg2);">
       <div class="card-body d-flex flex-column" style="padding:1rem 1.1rem;">
         <div style="font-size:.82rem;color:var(--muted);line-height:1.6;">
           <strong style="color:var(--steel);">How it works:</strong><br>
@@ -282,7 +339,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
         </div>
         <div class="mt-auto pt-3">
           <button class="btn-calc w-100" onclick="calculate()" style="font-size:1.1rem;padding:1.1rem 2rem;">
-            <span style="font-size:1.3rem;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M80,136h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16Zm0,32h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16Zm0,32h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16ZM200,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V40A16,16,0,0,0,200,24Zm0,192H56V40H200ZM80,96h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16Z"/></svg></span>
+            <i class="bi bi-calculator-fill" style="font-size:1.3rem;"></i></span>
             Calculate Stack Layout
           </button>
         </div>
@@ -298,7 +355,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
   <!-- Placeholder -->
   <div id="placeholder" class="calc-card" style="border:2px dashed var(--border);background:#fafcff;box-shadow:none;">
     <div class="card-body text-center py-5">
-      <span style="font-size:3rem;color:#b0c4de;display:block;margin-bottom:1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232,200a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H224A8,8,0,0,1,232,200ZM52.57,168a8,8,0,0,0,10.89-3L80,136.21l28.31,12.35a8,8,0,0,0,9.44-2.49l40-52,29.38,14.69a8,8,0,1,0,7.16-14.32l-32-16a8,8,0,0,0-9.44,2.49l-40,52L84.55,121a8,8,0,0,0-9.82,2.8l-25.11,40A8,8,0,0,0,52.57,168Z"/></svg></span>
+      <i class="bi bi-diagram-3" style="font-size:3rem;color:#b0c4de;display:block;margin-bottom:1rem;"></i>
       <div style="color:var(--muted);font-size:.9rem;font-weight:500;">Enter your inputs and click<br><strong>Calculate Stack Layout</strong></div>
       <div style="color:#b0c4de;font-size:.78rem;margin-top:.5rem;font-family:var(--mono);">Results update instantly on every change</div>
     </div>
@@ -311,20 +368,19 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     <div class="mb-2" id="statCards"></div>
     <!-- Piece usage full width -->
     <div class="calc-card">
-      <div class="card-hdr mid"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H224A8,8,0,0,1,232,208Zm-200-48H56V48A16,16,0,0,1,72,32H88a16,16,0,0,1,16,16V160Zm80,0h24V96a16,16,0,0,0-16-16H104a16,16,0,0,0-16,16v64Zm88,0h-24V112a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v48h-8v16Z"/></svg> Piece Usage</div>
+      <div class="card-hdr mid"><i class="bi bi-bar-chart-fill me-1"></i> Piece Usage</div>
       <div class="card-body" id="invSummary"></div>
     </div>
     <!-- Stack visual full width -->
     <div class="calc-card">
-      <div class="card-hdr"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232.49,212.85l-96,16a8.08,8.08,0,0,1-2.64,0l-96-16A8,8,0,0,1,32,205.14a8,8,0,0,1,9.51-6.63L128,213.17l86.49-14.66A8,8,0,0,1,217.49,212.85ZM128,181.17l86.49-14.66a8,8,0,1,0-2.64-15.78l-83.85,14.22-83.85-14.22a8,8,0,1,0-2.64,15.78ZM24,112a8,8,0,0,0,6.49,7.85l96,16a8.08,8.08,0,0,0,2.64,0l96-16A8,8,0,0,0,232,112L128,68Z"/></svg> Stack Placement Visual</div>
+      <div class="card-hdr"><i class="bi bi-layers-fill me-1"></i> Stack Placement</div>
       <div class="card-body" id="stackVisual"></div>
     </div>
     <!-- Layout tables full width -->
     <div id="layoutTables"></div>
     <!-- Chain-down points -->
     <div class="calc-card" id="chainDownCard" style="display:none;">
-      <div class="card-hdr" style="background:var(--chain);">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.43,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.74,139.72a40,40,0,0,0,56.58,56.58l9.95-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142a8,8,0,1,0-10.64,12,56,56,0,0,0,76.81-2.26l24.13-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg> Recommended Chain-Down Points
+      <div class="card-hdr" style="background:var(--wg11);"><i class="bi bi-link-45deg me-1"></i> Chain-Down Points
       </div>
       <div class="card-body" id="chainDown"></div>
     </div>
@@ -529,11 +585,10 @@ function solve(){
   }
 
   // Choose stack positions for sled 1 — fewest stacks while keeping the flange
-  // supported. A stack at position P "covers" up to skipN neighbors on each side,
-  // BUT only neighbors whose gap is close to P's gap (within one 1/2" step).
-  // Where the gap changes steeply, coverage is reduced so unsupported positions
-  // still get their own stack — stability is never sacrificed for fewer stacks.
-  const needStack1 = s1Positions.filter(p=>p.above>0.001);
+  // supported. First and last welded angles on each sled are never stacked
+  // (end positions used for chain-down and girder end support only).
+  const needStack1 = s1Positions.filter(p=>
+    p.above>0.001 && p.weldNum>1 && p.weldNum<nWeld);
   const gapByNum = Object.fromEntries(s1Positions.map(p=>[p.weldNum, p.above]));
   const COVER_TOL  = 0.5; // max gap difference (in) a single stack can bridge
 
@@ -702,7 +757,7 @@ function renderStackVisual(r){
     `<div style="display:flex;flex-direction:column;align-items:center;`+
     `justify-content:flex-end;min-width:24px;padding:0 2px;height:${containerH}px;margin-bottom:20px;">`+
     `<div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);`+
-    `writing-mode:vertical-rl;margin-bottom:4px;">GAP</div>`+
+    `writing-mode:vertical-rl;margin-bottom:4px;">CNTR</div>`+
     `<div style="flex:1;border-left:2px dashed #cbd5e1;min-height:20px;"></div>`+
     `<div style="height:5px;width:100%;"></div>`+
     `</div>`;
@@ -716,9 +771,9 @@ function renderStackVisual(r){
   el.innerHTML =
     `<div style="overflow-x:auto;padding:.25rem 0;">`+
       `<div style="display:flex;align-items:flex-end;gap:0;min-width:320px;">`+
-        sledHtml(s1, 'SLED 1', 'var(--sled1)')+
+        sledHtml(s1, 'SLED 1', 'var(--wg11)')+
         gapHtml+
-        sledHtml(s2, 'SLED 2', 'var(--sled2)')+
+        sledHtml(s2, 'SLED 2', 'var(--wg7)')+
       `</div>`+
       outerLabels+
     `</div>`+
@@ -758,15 +813,15 @@ function renderStats(r){
   document.getElementById('statCards').innerHTML=`
     <div class="row g-2">
       <div class="col-6 col-sm-4 col-lg">
-        <div class="stat-card" style="background:linear-gradient(135deg,var(--steel) 0%,#0f2540 100%);border-color:var(--steel);">
-          <div class="stat-val" style="font-size:1.6rem;color:#fcd34d;">${r.nStacks}</div>
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--wg11) 0%,#2a2920 100%);border-color:var(--steel);">
+          <div class="stat-val" style="font-size:1.6rem;color:#f0a882;">${r.nStacks}</div>
           <div class="stat-lbl" style="color:rgba(255,255,255,0.7);">Stacks / sled</div>
         </div>
       </div>
       <div class="col-6 col-sm-4 col-lg">
         <div class="stat-card" style="background:linear-gradient(135deg,var(--mid) 0%,var(--steel) 100%);border-color:var(--mid);">
-          <div class="stat-val" style="font-size:1.6rem;color:#fcd34d;">${r.nWeld}</div>
-          <div class="stat-lbl" style="color:rgba(255,255,255,0.7);">Welded / sled</div>
+          <div class="stat-val" style="font-size:1.6rem;color:#f0a882;">${r.nWeld}</div>
+          <div class="stat-lbl" style="color:rgba(255,255,255,0.7);">Fixed / sled</div>
         </div>
       </div>
       <div class="col-6 col-sm-4 col-lg">
@@ -791,8 +846,8 @@ function renderStats(r){
         <div class="stat-card" style="text-align:left;padding:.65rem .85rem;">
           <div style="font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:.3rem;">Positions on Girder</div>
           <div class="mono" style="font-size:.72rem;color:var(--steel);line-height:1.6;">
-            <b style="color:var(--sled1);">S1:</b> ${r.s1Start.toFixed(1)} – ${r.s1End.toFixed(1)} ft<br>
-            <b style="color:var(--sled2);">S2:</b> ${r.s2Start.toFixed(1)} – ${r.s2End.toFixed(1)} ft<br>
+            <b style="color:var(--wg11);">S1:</b> ${r.s1Start.toFixed(1)} – ${r.s1End.toFixed(1)} ft<br>
+            <b style="color:var(--wg7);">S2:</b> ${r.s2Start.toFixed(1)} – ${r.s2End.toFixed(1)} ft<br>
             <span style="color:var(--muted);font-size:.65rem;">${ovStr}</span>
           </div>
         </div>
@@ -828,23 +883,23 @@ function renderInvSummary(r){
 
 function tableRows(rows, r){
   if(r.nStacks===0) return `<tr><td colspan="7" class="text-center py-3" style="color:var(--success);font-weight:600;">
-    <span style="margin-right:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span>
+    <i class="bi bi-check-circle-fill me-2"></i></span>
     Welded angle height fills gap at all positions — no stacking needed</td></tr>`;
   return rows.map(row=>{
     let trClass='', badge='', pill='<span style="color:#aaa">—</span>';
     if(row.action==='stack'){
       trClass='row-stack';
-      badge=`<span class="badge-stack"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M208,144a8,8,0,0,1-8,8H184v16a8,8,0,0,1-16,0V152H152a8,8,0,0,1,0-16h16V120a8,8,0,0,1,16,0v16h16A8,8,0,0,1,208,144Zm24,40.85-96,16a8.08,8.08,0,0,1-2.64,0l-96-16A8,8,0,0,1,32,173.14a8,8,0,0,1,9.51-6.63L128,181.17l60.5-10.26a8,8,0,0,1,2.64,15.78ZM24,112a8,8,0,0,0,6.49,7.85l96,16a8.08,8.08,0,0,0,2.64,0l50.62-8.44a8,8,0,0,0-2.64-15.78L128,120.17,47.47,106,128,68l50.4,27.57a8,8,0,0,0,7.2-14.32l-56-30.63a15.88,15.88,0,0,0-15.2,0l-88,48.17A8,8,0,0,0,24,112Z"/></svg> STACK HERE</span>`;
+      badge=`<span class="badge-stack"> STACK HERE</span>`;
       pill=`<span class="combo-pill">${row.combo.desc}</span>`;
     } else if(row.action==='ok'){
       trClass='row-ok';
-      badge=`<span class="badge-ok"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg> No stack needed</span>`;
+      badge=`<span class="badge-ok"> No stack needed</span>`;
     } else if(row.action==='skip'){
       trClass='row-skip';
       badge=`<span class="badge-skip">Covered nearby</span>`;
     } else {
       trClass='row-stack';
-      badge=`<span class="badge-short"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg> Need more pieces</span>`;
+      badge=`<span class="badge-short"> Need more pieces</span>`;
     }
     const gapStyle = row.gap>0.001?'color:var(--warn);font-weight:700':'color:var(--muted)';
     return `<tr class="${trClass}">
@@ -872,7 +927,7 @@ function renderLayout(r){
   document.getElementById('layoutTables').innerHTML=`
     <div style="margin-top:.75rem">
       <div class="sled-hdr">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg> SLED 1
+         SLED 1
         <span style="opacity:.65;font-size:.72rem;font-weight:400">
           Numbered left→right (outer #1 → inner #${r.nWeld}) · skip ${r.skipN} between stacks
           ${r.nStacks>0?' &nbsp;·&nbsp; Stacks at: '+stackList1:''}
@@ -882,7 +937,7 @@ function renderLayout(r){
         <table class="layout-tbl">${thCols}<tbody>${tableRows(r.rows1,r)}</tbody></table>
       </div>
       <div class="sled-hdr s2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></svg> SLED 2
+         SLED 2
         <span style="opacity:.65;font-size:.72rem;font-weight:400">
           Mirror of Sled 1 — numbered right→left (outer #1 → inner #${r.nWeld}).
           Same stack at same position-from-outer-end on both sleds.
@@ -960,7 +1015,7 @@ function drawCamber(r){
     // vertical dashed boundary lines
     for(let i=1;i<bounds.length-1;i++){
       const bx=pad+(bounds[i]/girderFt)*gW;
-      segmentMarkers+=`<line x1="${bx.toFixed(1)}" y1="${pad}" x2="${bx.toFixed(1)}" y2="${baseY}" stroke="#cbd5e1" stroke-width="0.75" stroke-dasharray="2 2"/>`;
+      segmentMarkers+=`<line x1="${bx.toFixed(1)}" y1="${pad}" x2="${bx.toFixed(1)}" y2="${baseY}" stroke="#ccc9c2" stroke-width="0.75" stroke-dasharray="2 2"/>`;
     }
     // segment length labels centered in each segment, near top
     for(let i=0;i<5;i++){
@@ -968,36 +1023,51 @@ function drawCamber(r){
       const segLen=bounds[i+1]-bounds[i];
       if(segLen<=0.05) continue;
       segmentMarkers+=`<text x="${mid.toFixed(1)}" y="${pad+9}" text-anchor="middle" font-size="7" fill="#64748b" font-family="monospace">${segLen.toFixed(segLen%1===0?0:1)}'</text>`;
-      segmentMarkers+=`<text x="${mid.toFixed(1)}" y="${pad+17}" text-anchor="middle" font-size="6" fill="#94a3b8" font-family="monospace">${segNames[i]}</text>`;
+      segmentMarkers+=`<text x="${mid.toFixed(1)}" y="${pad+17}" text-anchor="middle" font-size="6" fill="#7a7870" font-family="monospace">${segNames[i]}</text>`;
     }
   }
 
   svg.innerHTML=`
-    <rect x="${pad}" y="${pad}" width="${gW}" height="${gH}" rx="5" fill="#f0f6ff" stroke="#d0dae8" stroke-width="1"/>
-    <!-- Chord line -->
-    <line x1="${pad}" y1="${baseY}" x2="${pad+gW}" y2="${baseY}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 3"/>
+    <!-- Background -->
+    <rect x="${pad}" y="${pad}" width="${gW}" height="${gH}" rx="5" fill="#f4f3f0" stroke="#ccc9c2" stroke-width="1"/>
+    <!-- Chord / baseline -->
+    <line x1="${pad}" y1="${baseY}" x2="${pad+gW}" y2="${baseY}" stroke="#ccc9c2" stroke-width="1" stroke-dasharray="4 3"/>
+    <!-- Girder end markers -->
+    <line x1="${pad}" y1="${pad+4}" x2="${pad}" y2="${baseY}" stroke="#7a7870" stroke-width="1.5"/>
+    <line x1="${pad+gW}" y1="${pad+4}" x2="${pad+gW}" y2="${baseY}" stroke="#7a7870" stroke-width="1.5"/>
     <!-- Camber curve -->
-    <path d="${pathD}" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="miter"/>
-    <!-- Gap arrow at worst point -->
+    <path d="${pathD}" fill="none" stroke="#c6623f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="miter"/>
+    <!-- Max gap label: dashed vertical line + label at the highest gap point -->
     ${(type==='up'||type==='hatrev')?`
-      <text x="${pad+gW/2+5}" y="${pad+gH*0.4}" font-size="9" fill="#b45309" font-family="monospace">${maxGap}"</text>`:''}
+      <line x1="${pad+gW/2}" y1="${pad+2}" x2="${pad+gW/2}" y2="${baseY}"
+            stroke="#c6623f" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+      <text x="${pad+gW/2}" y="${pad+12}" text-anchor="middle"
+            font-size="9" fill="#a84e30" font-family="monospace" font-weight="bold">MAX ${maxGap}"</text>`:''}
     ${(type==='down'||type==='hat')?`
-      <text x="${pad+12}" y="${pad+gH*0.4}" font-size="9" fill="#b45309" font-family="monospace">${maxGap}"</text>
-      <text x="${pad+gW-30}" y="${pad+gH*0.4}" font-size="9" fill="#b45309" font-family="monospace">${maxGap}"</text>`:''}
-    <!-- Sled 1 -->
-    <rect x="${s1x}" y="${sledY}" width="${s1w}" height="${sledH}" rx="2" fill="#1a3a5c" opacity="0.85"/>
-    <text x="${s1x+s1w/2}" y="${sledY-3}" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace" font-weight="bold">SLED 1</text>
-    <!-- Sled 2 -->
-    <rect x="${s2x}" y="${sledY}" width="${s2w}" height="${sledH}" rx="2" fill="#2563a8" opacity="0.85"/>
-    <text x="${s2x+s2w/2}" y="${sledY-3}" text-anchor="middle" font-size="8" fill="#2563a8" font-family="monospace" font-weight="bold">SLED 2</text>
-    <!-- Girder ends -->
-    <line x1="${pad}" y1="${pad+4}" x2="${pad}" y2="${baseY}" stroke="#94a3b8" stroke-width="1.5"/>
-    <line x1="${pad+gW}" y1="${pad+4}" x2="${pad+gW}" y2="${baseY}" stroke="#94a3b8" stroke-width="1.5"/>
-    <!-- Labels -->
-    <text x="${pad}" y="${H-2}" font-size="8" fill="#94a3b8" font-family="monospace">Left end</text>
-    <text x="${pad+gW}" y="${H-2}" font-size="8" fill="#94a3b8" font-family="monospace" text-anchor="end">Right end</text>
-    <text x="${pad+gW/2}" y="${H-2}" font-size="8" fill="#94a3b8" font-family="monospace" text-anchor="middle">Center</text>
-    ${segmentMarkers}`;
+      <line x1="${pad+4}" y1="${pad+2}" x2="${pad+4}" y2="${baseY}"
+            stroke="#c6623f" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+      <line x1="${pad+gW-4}" y1="${pad+2}" x2="${pad+gW-4}" y2="${baseY}"
+            stroke="#c6623f" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+      <text x="${pad+gW*0.12}" y="${pad+12}" text-anchor="middle"
+            font-size="9" fill="#a84e30" font-family="monospace" font-weight="bold">MAX ${maxGap}"</text>`:''}
+    ${(type==='flat')?`
+      <text x="${pad+gW/2}" y="${pad+12}" text-anchor="middle"
+            font-size="9" fill="#a84e30" font-family="monospace" font-weight="bold">UNIFORM ${maxGap}"</text>`:''}
+    <!-- Segment markers for trapezoidal types -->
+    ${segmentMarkers}
+    <!-- Sled 1 rect + centered label -->
+    <rect x="${s1x.toFixed(1)}" y="${sledY}" width="${s1w.toFixed(1)}" height="${sledH}" rx="2" fill="#3d3c35" opacity="0.85"/>
+    <text x="${(s1x+s1w/2).toFixed(1)}" y="${sledY+sledH-2}" text-anchor="middle"
+          font-size="8" fill="#ffffff" font-family="monospace" font-weight="bold">SLED 1</text>
+    <!-- Sled 2 rect + centered label -->
+    <rect x="${s2x.toFixed(1)}" y="${sledY}" width="${s2w.toFixed(1)}" height="${sledH}" rx="2" fill="#8c8279" opacity="0.85"/>
+    <text x="${(s2x+s2w/2).toFixed(1)}" y="${sledY+sledH-2}" text-anchor="middle"
+          font-size="8" fill="#ffffff" font-family="monospace" font-weight="bold">SLED 2</text>
+    <!-- Bottom axis labels -->
+    <text x="${pad}" y="${H-2}" font-size="8" fill="#7a7870" font-family="monospace">Left end</text>
+    <text x="${pad+gW}" y="${H-2}" font-size="8" fill="#7a7870" font-family="monospace" text-anchor="end">Right end</text>
+    <text x="${(pad+gW/2).toFixed(1)}" y="${H-2}" font-size="8" fill="#7a7870" font-family="monospace" text-anchor="middle">Center</text>
+`;
 }
 
 function updateCamberDesc(){
@@ -1077,7 +1147,7 @@ function renderChainDown(r){
           <span style="background:${accentColor};color:#fff;padding:2px 10px;
             border-radius:20px;font-family:var(--mono);font-size:.78rem;font-weight:700;
             display:inline-flex;align-items:center;gap:4px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.43,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.74,139.72a40,40,0,0,0,56.58,56.58l9.95-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142a8,8,0,1,0-10.64,12,56,56,0,0,0,76.81-2.26l24.13-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg> Chain ${i+1}
+             Chain ${i+1}
           </span>
         </td>
         <td class="mono" style="font-weight:700;color:${accentColor};">${p.label}</td>
@@ -1089,7 +1159,7 @@ function renderChainDown(r){
     return `
       <div style="font-size:.78rem;font-weight:700;color:${accentColor};
         margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.43,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.74,139.72a40,40,0,0,0,56.58,56.58l9.95-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142a8,8,0,1,0-10.64,12,56,56,0,0,0,76.81-2.26l24.13-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg> ${sledLabel}
+         ${sledLabel}
         <span style="font-weight:400;color:var(--muted);">${span(pts)}</span>
       </div>
       <div class="layout-wrap" style="margin-bottom:1rem;">
@@ -1106,23 +1176,23 @@ function renderChainDown(r){
   el.innerHTML = `
     <div class="row g-2 mb-3">
       <div class="col-4">
-        <div class="stat-card" style="background:linear-gradient(135deg,var(--chain),#5b21b6);
-          border-color:var(--chain);text-align:center;">
-          <div class="stat-val" style="color:#fcd34d;font-size:1.5rem;">${total}</div>
+        <div class="stat-card" style="background:linear-gradient(135deg,#1e1e18,#2a2920);
+          border-color:#1e1e18;text-align:center;">
+          <div class="stat-val" style="color:#f0a882;font-size:1.5rem;">${total}</div>
           <div class="stat-lbl" style="color:rgba(255,255,255,.75);">Total chains</div>
         </div>
       </div>
       <div class="col-4">
-        <div class="stat-card" style="background:linear-gradient(135deg,var(--sled1),#0f2540);
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--sled1),#2a2920);
           border-color:var(--sled1);text-align:center;">
-          <div class="stat-val" style="color:#fcd34d;font-size:1.5rem;">${s1pts.length}</div>
+          <div class="stat-val" style="color:#f0a882;font-size:1.5rem;">${s1pts.length}</div>
           <div class="stat-lbl" style="color:rgba(255,255,255,.75);">Sled 1</div>
         </div>
       </div>
       <div class="col-4">
-        <div class="stat-card" style="background:linear-gradient(135deg,var(--sled2),#064e3b);
+        <div class="stat-card" style="background:linear-gradient(135deg,var(--sled2),#5c5450);
           border-color:var(--sled2);text-align:center;">
-          <div class="stat-val" style="color:#fcd34d;font-size:1.5rem;">${s2pts.length}</div>
+          <div class="stat-val" style="color:#f0a882;font-size:1.5rem;">${s2pts.length}</div>
           <div class="stat-lbl" style="color:rgba(255,255,255,.75);">Sled 2</div>
         </div>
       </div>
@@ -1130,13 +1200,13 @@ function renderChainDown(r){
     <div style="font-size:.78rem;color:var(--muted);background:var(--chain-bg);
       border:1px solid var(--chain-light);border-radius:6px;padding:.5rem .85rem;
       margin-bottom:1rem;line-height:1.5;">
-      <span style="color:var(--chain);"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg></span>
+      <span style="color:var(--chain);"></span>
       <strong style="color:var(--chain);">Chain-down guidance:</strong>
-      Positioned ~10 ft from each end of sled. Hook chain around the nearest fixed welded angle.
+      Positioned approximately 8–10 ft from each end of sled. Hook chain around the nearest fixed welded angle.
       Chain force also holds any stack at that position firmly in place.
     </div>
     ${chainTable(s1pts,'SLED 1','var(--sled1)','var(--sled1-bg)')}
-    ${chainTable(s2pts,'SLED 2','var(--sled2)','var(--sled2-bg)')}`;
+    ${chainTable(s2pts,'SLED 2','var(--wg7)','var(--wg1)')}`;
 }
 
 
