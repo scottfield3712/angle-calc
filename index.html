@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bridge Girder Angle Stack Calculator</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20180%20180'%3E%3C%21--%20Background%20--%3E%3Crect%20width='180'%20height='180'%20rx='40'%20fill='%25231a3a5c'/%3E%3C%21--%20Girder%20I-beam%20shape%20--%3E%3C%21--%20Top%20flange%20--%3E%3Crect%20x='30'%20y='40'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Web%20--%3E%3Crect%20x='78'%20y='58'%20width='24'%20height='60'%20fill='%2523d97706'/%3E%3C%21--%20Bottom%20flange%20--%3E%3Crect%20x='30'%20y='118'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28left%20side%29%20--%3E%3Crect%20x='38'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='38'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='38'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28right%20side%29%20--%3E%3Crect%20x='110'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='110'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='110'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20180%20180'%3E%3C%21--%20Background%20--%3E%3Crect%20width='180'%20height='180'%20rx='40'%20fill='%25231a3a5c'/%3E%3C%21--%20Girder%20I-beam%20shape%20--%3E%3C%21--%20Top%20flange%20--%3E%3Crect%20x='30'%20y='40'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Web%20--%3E%3Crect%20x='78'%20y='58'%20width='24'%20height='60'%20fill='%2523d97706'/%3E%3C%21--%20Bottom%20flange%20--%3E%3Crect%20x='30'%20y='118'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28left%20side%29%20--%3E%3Crect%20x='38'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='38'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='38'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28right%20side%29%20--%3E%3Crect%20x='110'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='110'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='110'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAxElEQVR42mNkwAKkrGL+M9AAPDu2hBFdjJEeFuNzCBO9LUe3i4nelqM7golhgAHjQPgeGbBgE9xvu4omljkeDsMQY6KX5bjMHvA0MDgTISyo1Dp+PkeXu1XBLonPQHx6sKUBnLng6dHFz3FZgssR2CyHAWnrWEmicwEULMMjV0wtPUOzIMKVVbHF8aDPBaMOGHXA4C6KR6vjkZkIySlOKUkDA94oZcLWXaIXeHZsCePgSAMDEQowO5nw9Vzp0TllHOjuOQDlOlJ2/GJmrAAAAABJRU5ErkJggg==">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAADHElEQVR42u3csVEbURCA4XtvNEMNQO4i8BDQBBGugsQlOHEVKKIJAgYVQY6owRHkDB4LSb63u/d9DZzm3c9qdSPRpgDOLm7eJtLbbtZt9GtoAqZS4E3EVIq7iZhKcTchUynsLmYqPQxoQqbStO5iptK0bkKm0rTuYqbStO5iplLUXcxUirqLmUpRdzFTKeouZipF3cVMpai7Y6KSbjpTaUp3MVMpaisH9VcO05msU7qLmUpRWzmou3KYzmSf0iY09T8UQvqgrRtUWDtMaKwcEDpo6wZV1g4TGisHCBpm0OzPmNAgaBA0CJrlWo28+MPlvTtQ1NXj9ZDrDnnKIWRhWzkgYtCm87LMfb9NaExoEDQIGgSNoEHQIGgQNAgaQYOgQdAgaAgX9KhfMjCGL/jDAYb+o5mPX/7+9uvPa5SDef55chr95kU+r0X9pvAzL093r9GCOf/+43TXP8a5366znZeVAwSNoEHQIGgQNAgaQYOgjyjCQ/nIr8d57WblUPJyXsGDfnm6+x0oltvoN895BV45It2ciK/HeflQiA+FIGgQNAgaBI2gB4j23Df6c2jn9bmVQ8nLeVk5EDQIGgQNggZBI2gQNAgaBA2CRtAgaBA0CBpBg6BB0CBoEDSCBkGDoEHQIGgEDYIGQYOgQdAIGgQNggZBg6ARNAgaBA2CBkEjaBA0zK+dXdy8jbr4w+W9O1DU1eP1coIWsrCtHBAxaNN5Wea+3yY0JjQIGgQNgkbQIGgQNAgaBI2gQdAgaBA0hAt61C8ZGMMX/OEAflNIqXfioUGDlQMEjaAhY9Dbzbo5BirYbtbNhMbKAYKGuYK2R1NhfzahsXJAiqCtHWRfN0xorByQJmhrB5nXDROa+iuHKU3W6fzXCS1qMsZs5aD+ymFKk3U6/3NCi5pMMVs5WM7KYUqTbTrvPKFFTYaYv7RyiJroMX95hxY1kWPe60OhqIka815Bi5qoMe8dtKiJGPM0TdNRovQPHxkd8sET2rQmWsxHm9CmNVGGYY/+AhHz0AltWjNy6M02TcUt4jmuM2Q9ELeISwUtcAH/L+/QlxeZuUL9sQAAAABJRU5ErkJggg==">
 <meta name="theme-color" content="#1a3a5c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Girder Calc">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Bridge Girder Angle Stack Calculator</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-<!-- Phosphor Icons - free, MIT licensed -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/2.0.0/phosphor.min.js"></script>
+<!-- Icons: inline SVG (works offline/local file) -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 :root {
@@ -144,7 +143,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     <div class="calc-card flex-fill">
       <div class="card-hdr">
         <span class="step-num">1</span>
-        <ph-line-segments-bold></ph-line-segments-bold> Girder
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M237.66,98.34l-32-32a8,8,0,0,0-11.32,11.32L212.69,96H183.57A16,16,0,0,0,168,107.43L139.57,164H116.43A16,16,0,0,0,100,152H44a16,16,0,0,0,0,32h56a16,16,0,0,0,15.57-12h23.14A16,16,0,0,0,154,160.57L182.43,104H216l-18.34,18.34a8,8,0,0,0,11.32,11.32l32-32A8,8,0,0,0,237.66,98.34Z"/></svg> Girder
       </div>
       <div class="card-body">
         <div class="input-row">
@@ -185,7 +184,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     <div class="calc-card flex-fill">
       <div class="card-hdr">
         <span class="step-num">2</span>
-        <ph-stack-bold></ph-stack-bold> Sleds
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232.49,212.85l-96,16a8.08,8.08,0,0,1-2.64,0l-96-16A8,8,0,0,1,32,205.14a8,8,0,0,1,9.51-6.63L128,213.17l86.49-14.66A8,8,0,0,1,217.49,212.85ZM128,181.17l86.49-14.66a8,8,0,1,0-2.64-15.78l-83.85,14.22-83.85-14.22a8,8,0,1,0-2.64,15.78ZM24,112a8,8,0,0,0,6.49,7.85l96,16a8.08,8.08,0,0,0,2.64,0l96-16A8,8,0,0,0,232,112L128,68Z"/></svg> Sleds
       </div>
       <div class="card-body">
         <div class="input-row">
@@ -213,7 +212,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     <div class="calc-card flex-fill">
       <div class="card-hdr">
         <span class="step-num">3</span>
-        <ph-package-bold></ph-package-bold> Stackable Angle Inventory
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.53,44L176,93.44,95.53,49.52ZM128,120,47.47,76,80,57.56l80.53,43.92ZM40,90l80,43.64V224L40,180.36ZM136,224V133.64l40-21.82V152a8,8,0,0,0,16,0V103l24-13.07V180.36Z"/></svg> Stackable Angle Inventory
       </div>
       <div class="card-body">
         <p style="font-size:.78rem;color:var(--muted);margin-bottom:.7rem;">
@@ -262,7 +261,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
   <div class="col-12 col-lg-8">
     <div class="calc-card h-100">
       <div class="card-hdr">
-        <ph-chart-line-bold></ph-chart-line-bold> Camber Profile — Gap Along Girder Length
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V128a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8V200H112V96a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h32V64a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z"/></svg> Camber Profile — Gap Along Girder Length
       </div>
       <div class="card-body">
         <div id="camberDescRow" style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem;padding:.45rem .6rem;background:var(--gray-bg);border-radius:6px;line-height:1.5;"></div>
@@ -283,7 +282,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
         </div>
         <div class="mt-auto pt-3">
           <button class="btn-calc w-100" onclick="calculate()" style="font-size:1.1rem;padding:1.1rem 2rem;">
-            <ph-calculator-bold style="font-size:1.3rem;"></ph-calculator-bold>
+            <span style="font-size:1.3rem;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M80,136h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16Zm0,32h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16Zm0,32h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16ZM200,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V40A16,16,0,0,0,200,24Zm0,192H56V40H200ZM80,96h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16Z"/></svg></span>
             Calculate Stack Layout
           </button>
         </div>
@@ -299,7 +298,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
   <!-- Placeholder -->
   <div id="placeholder" class="calc-card" style="border:2px dashed var(--border);background:#fafcff;box-shadow:none;">
     <div class="card-body text-center py-5">
-      <ph-graph-bold style="font-size:3rem;color:#b0c4de;display:block;margin-bottom:1rem;"></ph-graph-bold>
+      <span style="font-size:3rem;color:#b0c4de;display:block;margin-bottom:1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232,200a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H224A8,8,0,0,1,232,200ZM52.57,168a8,8,0,0,0,10.89-3L80,136.21l28.31,12.35a8,8,0,0,0,9.44-2.49l40-52,29.38,14.69a8,8,0,1,0,7.16-14.32l-32-16a8,8,0,0,0-9.44,2.49l-40,52L84.55,121a8,8,0,0,0-9.82,2.8l-25.11,40A8,8,0,0,0,52.57,168Z"/></svg></span>
       <div style="color:var(--muted);font-size:.9rem;font-weight:500;">Enter your inputs and click<br><strong>Calculate Stack Layout</strong></div>
       <div style="color:#b0c4de;font-size:.78rem;margin-top:.5rem;font-family:var(--mono);">Results update instantly on every change</div>
     </div>
@@ -312,12 +311,12 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     <div class="mb-2" id="statCards"></div>
     <!-- Piece usage full width -->
     <div class="calc-card">
-      <div class="card-hdr mid"><ph-chart-bar-bold></ph-chart-bar-bold> Piece Usage</div>
+      <div class="card-hdr mid"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H224A8,8,0,0,1,232,208Zm-200-48H56V48A16,16,0,0,1,72,32H88a16,16,0,0,1,16,16V160Zm80,0h24V96a16,16,0,0,0-16-16H104a16,16,0,0,0-16,16v64Zm88,0h-24V112a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v48h-8v16Z"/></svg> Piece Usage</div>
       <div class="card-body" id="invSummary"></div>
     </div>
     <!-- Stack visual full width -->
     <div class="calc-card">
-      <div class="card-hdr"><ph-stack-bold></ph-stack-bold> Stack Placement Visual</div>
+      <div class="card-hdr"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M232.49,212.85l-96,16a8.08,8.08,0,0,1-2.64,0l-96-16A8,8,0,0,1,32,205.14a8,8,0,0,1,9.51-6.63L128,213.17l86.49-14.66A8,8,0,0,1,217.49,212.85ZM128,181.17l86.49-14.66a8,8,0,1,0-2.64-15.78l-83.85,14.22-83.85-14.22a8,8,0,1,0-2.64,15.78ZM24,112a8,8,0,0,0,6.49,7.85l96,16a8.08,8.08,0,0,0,2.64,0l96-16A8,8,0,0,0,232,112L128,68Z"/></svg> Stack Placement Visual</div>
       <div class="card-body" id="stackVisual"></div>
     </div>
     <!-- Layout tables full width -->
@@ -325,7 +324,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
     <!-- Chain-down points -->
     <div class="calc-card" id="chainDownCard" style="display:none;">
       <div class="card-hdr" style="background:var(--chain);">
-        <ph-link-chain-bold></ph-link-chain-bold> Recommended Chain-Down Points
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.43,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.74,139.72a40,40,0,0,0,56.58,56.58l9.95-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142a8,8,0,1,0-10.64,12,56,56,0,0,0,76.81-2.26l24.13-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg> Recommended Chain-Down Points
       </div>
       <div class="card-body" id="chainDown"></div>
     </div>
@@ -829,23 +828,23 @@ function renderInvSummary(r){
 
 function tableRows(rows, r){
   if(r.nStacks===0) return `<tr><td colspan="7" class="text-center py-3" style="color:var(--success);font-weight:600;">
-    <ph-check-circle-bold style="margin-right:.4rem;"></ph-check-circle-bold>
+    <span style="margin-right:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span>
     Welded angle height fills gap at all positions — no stacking needed</td></tr>`;
   return rows.map(row=>{
     let trClass='', badge='', pill='<span style="color:#aaa">—</span>';
     if(row.action==='stack'){
       trClass='row-stack';
-      badge=`<span class="badge-stack"><ph-stack-plus-bold></ph-stack-plus-bold> STACK HERE</span>`;
+      badge=`<span class="badge-stack"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M208,144a8,8,0,0,1-8,8H184v16a8,8,0,0,1-16,0V152H152a8,8,0,0,1,0-16h16V120a8,8,0,0,1,16,0v16h16A8,8,0,0,1,208,144Zm24,40.85-96,16a8.08,8.08,0,0,1-2.64,0l-96-16A8,8,0,0,1,32,173.14a8,8,0,0,1,9.51-6.63L128,181.17l60.5-10.26a8,8,0,0,1,2.64,15.78ZM24,112a8,8,0,0,0,6.49,7.85l96,16a8.08,8.08,0,0,0,2.64,0l50.62-8.44a8,8,0,0,0-2.64-15.78L128,120.17,47.47,106,128,68l50.4,27.57a8,8,0,0,0,7.2-14.32l-56-30.63a15.88,15.88,0,0,0-15.2,0l-88,48.17A8,8,0,0,0,24,112Z"/></svg> STACK HERE</span>`;
       pill=`<span class="combo-pill">${row.combo.desc}</span>`;
     } else if(row.action==='ok'){
       trClass='row-ok';
-      badge=`<span class="badge-ok"><ph-check-bold></ph-check-bold> No stack needed</span>`;
+      badge=`<span class="badge-ok"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg> No stack needed</span>`;
     } else if(row.action==='skip'){
       trClass='row-skip';
       badge=`<span class="badge-skip">Covered nearby</span>`;
     } else {
       trClass='row-stack';
-      badge=`<span class="badge-short"><ph-warning-bold></ph-warning-bold> Need more pieces</span>`;
+      badge=`<span class="badge-short"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg> Need more pieces</span>`;
     }
     const gapStyle = row.gap>0.001?'color:var(--warn);font-weight:700':'color:var(--muted)';
     return `<tr class="${trClass}">
@@ -873,7 +872,7 @@ function renderLayout(r){
   document.getElementById('layoutTables').innerHTML=`
     <div style="margin-top:.75rem">
       <div class="sled-hdr">
-        <ph-arrow-right-bold></ph-arrow-right-bold> SLED 1
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg> SLED 1
         <span style="opacity:.65;font-size:.72rem;font-weight:400">
           Numbered left→right (outer #1 → inner #${r.nWeld}) · skip ${r.skipN} between stacks
           ${r.nStacks>0?' &nbsp;·&nbsp; Stacks at: '+stackList1:''}
@@ -883,7 +882,7 @@ function renderLayout(r){
         <table class="layout-tbl">${thCols}<tbody>${tableRows(r.rows1,r)}</tbody></table>
       </div>
       <div class="sled-hdr s2">
-        <ph-arrow-left-bold></ph-arrow-left-bold> SLED 2
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></svg> SLED 2
         <span style="opacity:.65;font-size:.72rem;font-weight:400">
           Mirror of Sled 1 — numbered right→left (outer #1 → inner #${r.nWeld}).
           Same stack at same position-from-outer-end on both sleds.
@@ -1078,7 +1077,7 @@ function renderChainDown(r){
           <span style="background:${accentColor};color:#fff;padding:2px 10px;
             border-radius:20px;font-family:var(--mono);font-size:.78rem;font-weight:700;
             display:inline-flex;align-items:center;gap:4px;">
-            <ph-link-chain-bold></ph-link-chain-bold> Chain ${i+1}
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.43,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.74,139.72a40,40,0,0,0,56.58,56.58l9.95-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142a8,8,0,1,0-10.64,12,56,56,0,0,0,76.81-2.26l24.13-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg> Chain ${i+1}
           </span>
         </td>
         <td class="mono" style="font-weight:700;color:${accentColor};">${p.label}</td>
@@ -1090,7 +1089,7 @@ function renderChainDown(r){
     return `
       <div style="font-size:.78rem;font-weight:700;color:${accentColor};
         margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem;">
-        <ph-link-chain-bold></ph-link-chain-bold> ${sledLabel}
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.43,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.74,139.72a40,40,0,0,0,56.58,56.58l9.95-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142a8,8,0,1,0-10.64,12,56,56,0,0,0,76.81-2.26l24.13-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg> ${sledLabel}
         <span style="font-weight:400;color:var(--muted);">${span(pts)}</span>
       </div>
       <div class="layout-wrap" style="margin-bottom:1rem;">
@@ -1131,7 +1130,7 @@ function renderChainDown(r){
     <div style="font-size:.78rem;color:var(--muted);background:var(--chain-bg);
       border:1px solid var(--chain-light);border-radius:6px;padding:.5rem .85rem;
       margin-bottom:1rem;line-height:1.5;">
-      <ph-info-bold style="color:var(--chain);"></ph-info-bold>
+      <span style="color:var(--chain);"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" style="display:inline-block;vertical-align:-0.15em"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg></span>
       <strong style="color:var(--chain);">Chain-down guidance:</strong>
       Positioned ~10 ft from each end of sled. Hook chain around the nearest fixed welded angle.
       Chain force also holds any stack at that position firmly in place.
