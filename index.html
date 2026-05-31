@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAhElEQVR42mNkwAKkrGL+M9AAPDu2hBFdjJEeFuNzCBO9LUe3i4nelqM7golhgAHjQPgeGQx4CAy4A1iwCa5bNIUmlgXF5YxGwagDqFcOoCdUbAlsNApGHTB0c8FoUTzqgNEm2chyALbuEr3As2NLGAdHFAxEKMDsZMLXc6VH55RxoLvnAEA3MJqugxJLAAAAAElFTkSuQmCC">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAACq0lEQVR42u3d0U0rQRBE0Z0RURAKYfCNiIBwiAD5mzAcitOACBDY2Dvd5XMSwGLvKxr0LI+tgMenl6+N9k7Hw1j9GoaASQp8iJikuIeISYp7CJmksKeYSfpjwBAySWs9xUzSWg8hk7TWU8wkrfUUM0lRTzGTFPUUM0lRTzGTFPUUM0lRTzGTFPX0bSLJtM4krfQUM0lROznIPzmsM11XeoqZpKidHOSeHNaZ7ittocn/pRDaB+3cIOHssNA4OaB00M4NUs4OC42TAwQNOxjuZyw0CBoEDYJG0CBoEDQIGgSNoEHQIGgQNAgaQYOgYb2HCi/i8+Pdkwjx/Pq29OsvfceKkIXt5ICKQVvnbKuer4XGQoOgQdAgaAQNggZBg6BB0AgaBA2CBkFD2aBXv7OBzOdroYlS4kOD/Gd/yxwVdGe3+MfoHHNygKARNAgaBA2CRtAgaBA0CBoEjaBB0CBoEDQIGkGDoEHQIGgQNIIGQYOgQdAgaAQNggZBg6BB0AgaBA2CBkGDoBE0CBr25HMKuaq7/pxCIQvbyQEVg7bO2VY9XwuNhQZBg6BB0AgaBA2CBkGDoBE0CBoEDYKGskGvfmcDmc/XQhPFewqJ+slbImhwcoCgETQIGgQNggZBI2gQNAgaBA2CRtAgaBA0XBL06XgYvg0kOB0Pw0Lj5ABBw15Bu6NJuJ8tNE4OaBG0s4Pu54aFxskBbYJ2dtD53LDQ5J8cVpqu6/zjQouajjE7Ocg/Oaw0Xdf514UWNZ1idnJwPyeHlabbOv95oUVNh5jPOjlETfWYz76hRU3lmC/6pVDUVI35oqBFTdWYLw5a1FSMedu27SpR+vBOVof874W21lSL+WoLba2pMoaz+gtEzEsX2lqzcvR2W1Nxi3iPr7PkPBC3iKOCFriAb+UbE1focPOXAZEAAAAASUVORK5CYII=">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABCUlEQVR42u1XsQ3DIBA8kFfIEhSpUqexxAwZITNkgMyQETKDJTeuU1GwRIZIKiREODCRDS58lfWn//t//IgXiOB4VB+sAGOsCG2ihnAqEVlbPNSStcXDJCQaQ7So3kfzDuwJNE+gcx+P06Gq8PX1ntcBpXso3VOuxCdmlzlxALDDSLkwIPNh9o61BgAmnefsMFKfVKxsB6bbBQBwvj8px+xhlalYxVPgi8eOZpExTGXsEHLMJxdL/lv9ahdRzeqLOsBmftEOOJEwY1+ccXPt9Cr2wa5lO4yUK7X/PEjW+MEY/MurmzPTSveLzPz+JNtmArF1qRaMsWIbR9CiC05TpjbXGsupaL2efwEMZocLfWxRMwAAAABJRU5ErkJggg==">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAADkklEQVR42u3dvXETYRRG4d1v3IKbUKDIMYlnXAMluAYKoAaXQA2ecULsaAM14SJMBOMEjFc/e+/r50QkDC/S8dGV0AzzVID9fvc6oT3Lcpi33jATGEmCzyRGktwziZEk90xkJIk9yIykDwNmIiOp1oPMSKr1TGQk1XqQGUm1HmRGktSDzEiSepAZSVIPMiNJ6kFmJEk9yIwkqYeHCUkMdUZSpQeZkSS1kwP5J4c6o2ulB5mRJLWTA7knhzqje6UVGvlvCoH2Qjs3kHB2KDScHEBpoZ0bSDk7FBpODoDQwAWY3c9QaIDQAKEBQoPQAKEBQgOEBggNQgOEBggNEBogNAgNEBogNEBogNAgNEBogNAAoQFCI5urY37zw821RxBn4f75RaEBQoPQQOQNXZXd3e2fXx8en+z5RHsGme1J2uPkgBtane2pukehodDqbE/VPQqNKM72sd3af7pcw89vX9/9aben1x6FLvJSas+2e9oL/fan3R57RorMX77/sMcebwqRRVuh1dAehYZCq7M9nfYoNBRafeypumeQ2Z6kPU4OODnUx56qexQaCq0+9lTdo9BQaPWxp+qeNoWu8GTZU39PaaF9t9ieGKG9lNrjTSG8KVRne5L2KDQUWn3sqbpHoaHQ6mNPxT2lhPZk2ePkACoKrT72KDRQUWj1sUehgYpCq489kYX2XV572gvtu7z2xAjtpdQebwqBikKrjz0KDVQUWn3sUWigotDqY0+M0J4se5wcQEWh1ccehQYqCq0+9ig0UFFo9bEnstC+y2tPe6F3d7el/pL29NpzDPN+v3td+5sfbq7/+eAcHp9KPVn21N/zm/vnF28KgZH8025PzzqXflMItBRafexRaODEnORTjqSPfbAdb18pNv2UI+klC04OoAxX53i5ABQaIDRAaARz1Md2gEIDhAYIDUIDhAYIDRAaIDQIDRAaIDRAaIDQ+BxCL8th9jAggWU5zAoNJwdAaOBSQrujkXA/KzScHEALoZ0d6H5uKDScHEAboZ0d6HxuKDTyTw6VRtc6/7XQpEZHmZ0cyD85VBpd6/xuoUmNTjI7OfB5Tg6VRrc6/3ehSY0OMn/o5CA1qsv84Rua1Kgs86o3haRGVZlXCU1qVJV5tdCkRkWZp2maTiKl/xoOW4t8dKHVGtVkPlmh1RpVYjiqDwSZNy20WmPL6F2spuQm8SX+nE3OA3KTOEpoghP4XPwC+WONIsBCTJYAAAAASUVORK5CYII=">
 <meta name="theme-color" content="#2e2e2a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Girder Calc">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Bridge Girder Angle Stack Calculator</title>
+<title>Angle Stack Calculator</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <!-- Icons: inline SVG (works offline/local file) -->
@@ -315,7 +315,7 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
 </div><!-- /input row -->
 
 <!-- ── Diagram + Calculate row ── -->
-<div class="row g-3 mb-3">
+<div class="row g-3 mb-3 align-items-stretch">
   <div class="col-12 col-lg-8">
     <div class="calc-card h-100">
       <div class="card-hdr"><i class="bi bi-graph-up me-1"></i> Camber Profile
@@ -328,8 +328,8 @@ input.form-control:focus, input.inv-qty:focus{background:#fff;border-color:var(-
       </div>
     </div>
   </div>
-  <div class="col-12 col-lg-4 d-flex flex-column" style="min-height:0;">
-    <div class="calc-card flex-fill d-flex flex-column" style="background:var(--wg1);border-color:var(--wg2);">
+  <div class="col-12 col-lg-4 d-flex flex-column">
+    <div class="calc-card flex-fill d-flex flex-column" style="background:#fff;border-color:var(--wg2);">
       <div class="card-body d-flex flex-column" style="padding:1rem 1.1rem;">
         <div style="font-size:.82rem;color:var(--muted);line-height:1.6;">
           <strong style="color:var(--steel);">How it works:</strong><br>
