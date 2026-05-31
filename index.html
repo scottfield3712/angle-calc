@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bridge Girder Angle Stack Calculator</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='10' width='28' height='12' rx='3' fill='%23d97706'/%3E%3Crect x='4' y='10' width='2' height='8' rx='1' fill='%23fff'/%3E%3Crect x='8' y='10' width='2' height='5' rx='1' fill='%23fff'/%3E%3Crect x='12' y='10' width='2' height='8' rx='1' fill='%23fff'/%3E%3Crect x='16' y='10' width='2' height='5' rx='1' fill='%23fff'/%3E%3Crect x='20' y='10' width='2' height='8' rx='1' fill='%23fff'/%3E%3Crect x='24' y='10' width='2' height='5' rx='1' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20180%20180'%3E%3C%21--%20Background%20--%3E%3Crect%20width='180'%20height='180'%20rx='40'%20fill='%25231a3a5c'/%3E%3C%21--%20Girder%20I-beam%20shape%20--%3E%3C%21--%20Top%20flange%20--%3E%3Crect%20x='30'%20y='40'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Web%20--%3E%3Crect%20x='78'%20y='58'%20width='24'%20height='60'%20fill='%2523d97706'/%3E%3C%21--%20Bottom%20flange%20--%3E%3Crect%20x='30'%20y='118'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28left%20side%29%20--%3E%3Crect%20x='38'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='38'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='38'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28right%20side%29%20--%3E%3Crect%20x='110'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='110'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='110'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20180%20180'%3E%3C%21--%20Background%20--%3E%3Crect%20width='180'%20height='180'%20rx='40'%20fill='%25231a3a5c'/%3E%3C%21--%20Girder%20I-beam%20shape%20--%3E%3C%21--%20Top%20flange%20--%3E%3Crect%20x='30'%20y='40'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Web%20--%3E%3Crect%20x='78'%20y='58'%20width='24'%20height='60'%20fill='%2523d97706'/%3E%3C%21--%20Bottom%20flange%20--%3E%3Crect%20x='30'%20y='118'%20width='120'%20height='18'%20rx='4'%20fill='%2523d97706'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28left%20side%29%20--%3E%3Crect%20x='38'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='38'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='38'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C%21--%20Stacked%20angle%20pieces%20under%20top%20flange%20%28right%20side%29%20--%3E%3Crect%20x='110'%20y='58'%20width='32'%20height='8'%20rx='2'%20fill='%2523ffffff'%20opacity='0.9'/%3E%3Crect%20x='110'%20y='68'%20width='32'%20height='6'%20rx='2'%20fill='%2523ffffff'%20opacity='0.7'/%3E%3Crect%20x='110'%20y='76'%20width='32'%20height='4'%20rx='2'%20fill='%2523ffffff'%20opacity='0.5'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Girder Calc">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 <!-- Phosphor Icons - free, MIT licensed -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/2.0.0/phosphor.min.js"></script>
@@ -14,7 +19,7 @@
   --steel:#1a3a5c; --mid:#2563a8; --light:#c8def5; --pale:#e8f2fc;
   --sled1:#1a3a5c; --sled1-light:#c8def5; --sled1-bg:#e8f2fc;
   --sled2:#0f6b5c; --sled2-light:#99e6d8; --sled2-bg:#d1faf5;
-  --chain:#7c3aed; --chain-light:#ede9fe; --chain-bg:#f5f3ff;
+  --chain:#2d4a6b; --chain-light:#c5d8ef; --chain-bg:#eaf1f8;
   --accent:#d97706; --success:#15803d; --success-bg:#dcfce7;
   --warn:#b45309; --warn-bg:#fef3c7;
   --danger:#b91c1c; --danger-bg:#fee2e2;
